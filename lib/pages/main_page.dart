@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ipk_kalkulator/components/DialogBox.dart';
 import 'package:ipk_kalkulator/components/Ipktile.dart';
 import 'package:ipk_kalkulator/database/database.dart';
+import 'package:ipk_kalkulator/pages/addValue_page.dart';
 
 class mainPage extends StatefulWidget {
   const mainPage({super.key});
@@ -65,7 +66,7 @@ class _mainPageState extends State<mainPage> {
                 onTap: () async {
                   await Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DialogBox()),
+                    MaterialPageRoute(builder: (context) => AddValue()),
                   );
                 });
           }),
