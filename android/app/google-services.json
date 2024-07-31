@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "349865586099",
+    "project_id": "ipk-mini-project",
+    "storage_bucket": "ipk-mini-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349865586099:android:7dd01fdef4719f7edaefc6",
+        "android_client_info": {
+          "package_name": "com.example.ipk_kalkulator"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChsEwD_PiBZS8sXfHn7intEbEgI4XHl0g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
