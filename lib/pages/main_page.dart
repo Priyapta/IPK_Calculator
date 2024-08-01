@@ -17,6 +17,8 @@ void onPressed() {
   FirebaseAuth.instance.signOut();
 }
 
+TextEditingController controllerMatkul = TextEditingController();
+
 class _mainPageState extends State<mainPage> {
   final mybox = Hive.box("mybox");
   Tododatabase db = Tododatabase();
@@ -66,7 +68,12 @@ class _mainPageState extends State<mainPage> {
                 onTap: () async {
                   await Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddValue()),
+                    MaterialPageRoute(
+                        builder: (context) => AddValue(
+                              db: db,
+                              index: index,
+                              namaMatkul: controllerMatkul.text,
+                            )),
                   );
                 });
           }),
