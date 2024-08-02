@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:ipk_kalkulator/components/component_field.dart';
 import 'package:ipk_kalkulator/database/database.dart';
 
@@ -12,63 +12,137 @@ class AddValue extends StatefulWidget {
   final Tododatabase db;
   final int index;
   final String namaMatkul;
-  // final String
 
   @override
   State<AddValue> createState() => _AddValueState();
 }
 
-TextEditingController controllerComponent = new TextEditingController();
-TextEditingController controllerNilai = new TextEditingController();
-TextEditingController controllerPersentase = new TextEditingController();
-int Nilai = int.parse(controllerNilai.text);
-
 class _AddValueState extends State<AddValue> {
-  int count = 0;
+  List<TextEditingController> componentControllers = [];
+  List<TextEditingController> nilaiControllers = [];
+  List<TextEditingController> persentaseControllers = [];
+  late List<String> hintTextMatkul = [];
+  late List<String> hintTextNilai = [];
+  late int count;
+
+  @override
+  void initState() {
+    super.initState();
+    count = widget.db.todoList[widget.index]["komponen"].length;
+    hintTextMatkul =
+        List<String>.from(widget.db.todoList[widget.index]["komponen"].keys);
+    hintTextNilai =
+        List<String>.from(widget.db.todoList[widget.index]["komponen"].values);
+    // Initialize controllers based on existing components
+    for (var i = 0; i < count; i++) {
+      componentControllers.add(TextEditingController());
+      nilaiControllers.add(TextEditingController());
+      persentaseControllers.add(TextEditingController());
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in componentControllers) {
+      controller.dispose();
+    }
+    for (var controller in nilaiControllers) {
+      controller.dispose();
+    }
+    for (var controller in persentaseControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
 
   void addComponent() {
     setState(() {
       count++;
+      componentControllers.add(TextEditingController());
+      nilaiControllers.add(TextEditingController());
+      persentaseControllers.add(TextEditingController());
     });
   }
 
   void saveTask() {
-    widget.db.todoList[widget.index][widget.namaMatkul]
-        [controllerComponent.text.toLowerCase()] = controllerNilai.text;
+    setState(() {
+      setState(() {
+        Map<String, String> updatedComponents = {};
+        for (int i = 0; i < count; i++) {
+          if (componentControllers[i].text.isNotEmpty) {
+            updatedComponents[componentControllers[i].text.toLowerCase()] =
+                nilaiControllers[i].text;
+            widget.db.todoList[widget.index]["komponen"] = updatedComponents;
+          }
+        }
+
+        widget.db.updateTask();
+        print(widget.db.todoList[widget.index]["komponen"]["test"]);
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.sizeOf(context).width;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: addComponent,
         child: Icon(Icons.add),
       ),
-      body: ListView.builder(
-        itemCount: count,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ComponentField(
-                    controller: controllerComponent,
-                    hintText: "Masukan Nama Komponen",
-                  ),
-                  ComponentField(
-                    controller: controllerNilai,
-                    hintText: "Masukan Nilai Matkul",
-                  ),
-                  ComponentField(
-                    controller: controllerPersentase,
-                    hintText: "Masukan Persentase Komponen",
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: count,
+              itemBuilder: (context, index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: Text(
+                            "Nama Mata Kuliah",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ComponentField(
+                          width: screenWidth / 2,
+                          controller: componentControllers[index],
+                          hintText: (index < hintTextMatkul.length &&
+                                  hintTextMatkul[index].isNotEmpty)
+                              ? hintTextMatkul[index]
+                              : " ",
+                        ),
+                        ComponentField(
+                          width: screenWidth / 4,
+                          controller: nilaiControllers[index],
+                          hintText: (index < hintTextMatkul.length &&
+                                  hintTextNilai[index].isNotEmpty)
+                              ? hintTextNilai[index]
+                              : " ",
+                        ),
+                        // ComponentField(
+                        //   controller: persentaseControllers[index],
+                        //   hintText: "Masukan Persentase Komponen",
+                        // ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          ElevatedButton(onPressed: saveTask, child: Text("save")),
+        ],
       ),
     );
   }

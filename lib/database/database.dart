@@ -25,10 +25,6 @@ class Tododatabase {
         rawList.map((item) => Map<String, dynamic>.from(item)));
   }
 
-  void updateDatabase() {
-    mybox.put("TODOLIST", todoList);
-  }
-
   void updateTask() {
     mybox.put("TODOLIST", todoList);
   }
