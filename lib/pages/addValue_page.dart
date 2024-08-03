@@ -73,11 +73,16 @@ class _AddValueState extends State<AddValue> {
             updatedComponents[componentControllers[i].text.toLowerCase()] =
                 nilaiControllers[i].text;
             widget.db.todoList[widget.index]["komponen"] = updatedComponents;
+          } else if (widget.db.todoList[widget.index]["komponen"]
+                  [hintTextMatkul[i].isNotEmpty] &&
+              nilaiControllers[i].text.isEmpty) {
+            widget.db.todoList[widget.index]["komponen"][hintTextMatkul[i]] =
+                nilaiControllers[i].text;
           }
         }
 
         widget.db.updateTask();
-        print(widget.db.todoList[widget.index]["komponen"]["test"]);
+        print(widget.db.todoList[widget.index]["komponen"]["w"]);
       });
     });
   }
