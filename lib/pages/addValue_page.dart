@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ipk_kalkulator/components/component_field.dart';
 import 'package:ipk_kalkulator/database/database.dart';
 
@@ -66,24 +65,21 @@ class _AddValueState extends State<AddValue> {
 
   void saveTask() {
     setState(() {
-      setState(() {
-        Map<String, String> updatedComponents = {};
-        for (int i = 0; i < count; i++) {
-          if (componentControllers[i].text.isNotEmpty) {
-            updatedComponents[componentControllers[i].text.toLowerCase()] =
-                nilaiControllers[i].text;
-            widget.db.todoList[widget.index]["komponen"] = updatedComponents;
-          } else if (widget.db.todoList[widget.index]["komponen"]
-                  [hintTextMatkul[i].isNotEmpty] &&
-              nilaiControllers[i].text.isEmpty) {
-            widget.db.todoList[widget.index]["komponen"][hintTextMatkul[i]] =
-                nilaiControllers[i].text;
-          }
+      Map<String, String> updatedComponents = {};
+      for (int i = 0; i < count; i++) {
+        if (componentControllers[i].text.isNotEmpty) {
+          widget.db.todoList[widget.index]["komponen"]
+                  [componentControllers[i].text.toLowerCase()] =
+              nilaiControllers[i].text;
+        } else if (componentControllers[i].text.isEmpty &&
+            nilaiControllers[i].text.isNotEmpty) {
+          widget.db.todoList[widget.index]["komponen"][hintTextMatkul[i]] =
+              nilaiControllers[i].text;
         }
+      }
 
-        widget.db.updateTask();
-        print(widget.db.todoList[widget.index]["komponen"]["w"]);
-      });
+      widget.db.updateTask();
+      print(widget.db.todoList[widget.index]["komponen"]);
     });
   }
 
@@ -107,38 +103,72 @@ class _AddValueState extends State<AddValue> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Text(
-                            "Nama Mata Kuliah",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Text(
+                                  "Nama Matakuliah",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              ComponentField(
+                                width: screenWidth / 2,
+                                controller: componentControllers[index],
+                                hintText: (index < hintTextMatkul.length &&
+                                        hintTextMatkul[index].isNotEmpty)
+                                    ? hintTextMatkul[index]
+                                    : " ",
+                              ),
+                            ],
                           ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        ComponentField(
-                          width: screenWidth / 2,
-                          controller: componentControllers[index],
-                          hintText: (index < hintTextMatkul.length &&
-                                  hintTextMatkul[index].isNotEmpty)
-                              ? hintTextMatkul[index]
-                              : " ",
                         ),
-                        ComponentField(
-                          width: screenWidth / 4,
-                          controller: nilaiControllers[index],
-                          hintText: (index < hintTextMatkul.length &&
-                                  hintTextNilai[index].isNotEmpty)
-                              ? hintTextNilai[index]
-                              : " ",
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Text(
+                                  "Nilai",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              ComponentField(
+                                width: screenWidth / 4,
+                                controller: nilaiControllers[index],
+                                hintText: (index < hintTextNilai.length &&
+                                        hintTextNilai[index].isNotEmpty)
+                                    ? hintTextNilai[index]
+                                    : " ",
+                              ),
+                            ],
+                          ),
                         ),
-                        // ComponentField(
-                        //   controller: persentaseControllers[index],
-                        //   hintText: "Masukan Persentase Komponen",
-                        // ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Text(
+                                  "Persentase",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              ComponentField(
+                                width: screenWidth / 6,
+                                controller: persentaseControllers[index],
+                                hintText: "Masukan Persentase Komponen",
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -146,7 +176,7 @@ class _AddValueState extends State<AddValue> {
               },
             ),
           ),
-          ElevatedButton(onPressed: saveTask, child: Text("save")),
+          ElevatedButton(onPressed: saveTask, child: Text("Save")),
         ],
       ),
     );
