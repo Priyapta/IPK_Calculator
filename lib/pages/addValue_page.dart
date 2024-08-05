@@ -22,6 +22,7 @@ class _AddValueState extends State<AddValue> {
   List<TextEditingController> persentaseControllers = [];
   late List<String> hintTextMatkul = [];
   late List<String> hintTextNilai = [];
+  late List<String> komponen = widget.db.todoList[widget.index]["persentase"];
   late int count;
 
   @override
@@ -63,23 +64,76 @@ class _AddValueState extends State<AddValue> {
     });
   }
 
+  void savePercetage(int num, int nums, List<String> list, String text) {
+    setState(() {
+      if (num < nums) {
+        widget.db.todoList[widget.index]["persentase"][num] = text;
+      } else {
+        widget.db.todoList[widget.index]["persentase"].add(text);
+      }
+    });
+  }
+
   void saveTask() {
     setState(() {
-      Map<String, String> updatedComponents = {};
+      // Initialize the updated components and percentages
+
+      List<String> updated =
+          List<String>.from(widget.db.todoList[widget.index]["persentase"]);
+
+      // Iterate through the controllers to update the database
       for (int i = 0; i < count; i++) {
-        if (componentControllers[i].text.isNotEmpty) {
-          widget.db.todoList[widget.index]["komponen"]
-                  [componentControllers[i].text.toLowerCase()] =
-              nilaiControllers[i].text;
-        } else if (componentControllers[i].text.isEmpty &&
-            nilaiControllers[i].text.isNotEmpty) {
-          widget.db.todoList[widget.index]["komponen"][hintTextMatkul[i]] =
-              nilaiControllers[i].text;
+        String komponen = componentControllers[i].text.trim();
+        String value = nilaiControllers[i].text.trim();
+        String percentage = persentaseControllers[i].text.trim();
+
+        if (i < hintTextMatkul.length) {
+          if (i < widget.db.todoList[widget.index]["persentase"].length) {
+            print("a");
+            widget.db.todoList[widget.index]["persentase"][i] = percentage;
+          } else if (i ==
+              widget.db.todoList[widget.index]["persentase"].length) {
+            // Jika indeks sesuai dengan panjang daftar, tambahkan nilai baru
+            widget.db.todoList[widget.index]["persentase"].add(percentage);
+          }
+          if (value.isNotEmpty && komponen.isNotEmpty) {
+            widget.db.todoList[widget.index]["komponen"]
+                [komponen.toLowerCase()] = value;
+            widget.db.todoList[widget.index]["komponen"]
+                .remove(hintTextMatkul[i]);
+          }
+          //Edit Nilai saja dari matkul diinginkan
+          else if (value.isNotEmpty) {
+            widget.db.todoList[widget.index]["komponen"][hintTextMatkul[i]] =
+                value;
+          }
+          //Jika komponen nilai dan matkul terisi
+        } else {
+          if (percentage.isNotEmpty && i < hintTextMatkul.length) {
+            print("c");
+            widget.db.todoList[widget.index]["persentase"].add(percentage);
+          }
+          if (komponen.isNotEmpty) {
+            widget.db.todoList[widget.index]["komponen"]
+                [komponen.toLowerCase()] = value;
+          }
+
+          // else if (komponen.isEmpty && value.isNotEmpty) {
+          //     widget.db.todoList[widget.index]["komponen"][hintTextMatkul[i]] = value;
+          // }
         }
       }
+      widget.db.updateTask();
+
+      // Update the database with the new components and percentages
+
+      // Save the changes to the database
+
+      // Debug prints to check the results
 
       widget.db.updateTask();
       print(widget.db.todoList[widget.index]["komponen"]);
+      print(widget.db.todoList[widget.index]["persentase"]);
     });
   }
 
@@ -164,7 +218,15 @@ class _AddValueState extends State<AddValue> {
                               ComponentField(
                                 width: screenWidth / 6,
                                 controller: persentaseControllers[index],
-                                hintText: "Masukan Persentase Komponen",
+                                hintText: (index <
+                                        widget
+                                            .db
+                                            .todoList[widget.index]
+                                                ["persentase"]
+                                            .length)
+                                    ? widget.db.todoList[widget.index]
+                                        ["persentase"][index]
+                                    : " ",
                               ),
                             ],
                           ),

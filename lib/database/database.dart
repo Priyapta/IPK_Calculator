@@ -13,7 +13,8 @@ class Tododatabase {
         "matkul": "matdis",
         "semester": "1",
         "komponen": {"test": "1"},
-        "nilai_matkul": "A"
+        "nilai_matkul": "A",
+        "persentase": [],
       },
     ];
     updateTask();
