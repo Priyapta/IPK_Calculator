@@ -22,8 +22,18 @@ TextEditingController controllerMatkul = TextEditingController();
 class _mainPageState extends State<mainPage> {
   final mybox = Hive.box("mybox");
   Tododatabase db = Tododatabase();
+  String sks = "1";
+  String semester = "1";
+  // final ValueNotifier<String> onSksChanged = ValueNotifier<String>("1");
+  // final ValueNotifier<String> semesterNotifier = ValueNotifier<String>("1");
   List todoList = [];
   void initState() {
+    // onSksChanged.addListener(() {
+    //   print("Selected value: ${onSksChanged.value}");
+    // });
+    // semesterNotifier.addListener(() {
+    //   print("Selected value: ${semesterNotifier.value}");
+    // });
     if (mybox.get("TODOLIST") == null) {
       db.create();
       db.updateTask();
@@ -36,11 +46,47 @@ class _mainPageState extends State<mainPage> {
     super.initState();
   }
 
+  void saveTask() {
+    setState(() {
+      db.todoList.add({
+        "matkul": controllerMatkul.text,
+        "sks": sks,
+        "semester": semester,
+        "komponen": {},
+        "nilai_matkul": "",
+        "persentase": [],
+      });
+      // print(onSksChanged);
+      print(db.todoList[0]["sks"]);
+      print(db.todoList[0]["semester"]);
+      Navigator.of(context).pop();
+      // db.updateTask();
+    });
+  }
+
+  void cancel() {
+    Navigator.of(context).pop();
+  }
+
   void addTask() {
     showDialog(
         context: context,
         builder: (context) {
-          return DialogBox();
+          return DialogBox(
+            controller: controllerMatkul,
+            onSksChanged: (value) {
+              setState(() {
+                sks = value;
+              });
+            },
+            onSemesterChanged: (value) {
+              setState(() {
+                semester = value;
+              });
+            },
+            saveTask: saveTask,
+            cancel: cancel,
+          );
         });
   }
 
@@ -72,7 +118,6 @@ class _mainPageState extends State<mainPage> {
                         builder: (context) => AddValue(
                               db: db,
                               index: index,
-                              namaMatkul: controllerMatkul.text,
                             )),
                   );
                 });

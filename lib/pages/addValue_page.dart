@@ -7,10 +7,10 @@ class AddValue extends StatefulWidget {
       {super.key,
       required this.db,
       required this.index,
-      required this.namaMatkul});
+      });
   final Tododatabase db;
   final int index;
-  final String namaMatkul;
+
 
   @override
   State<AddValue> createState() => _AddValueState();
@@ -78,8 +78,7 @@ class _AddValueState extends State<AddValue> {
     setState(() {
       // Initialize the updated components and percentages
 
-      List<String> updated =
-          List<String>.from(widget.db.todoList[widget.index]["persentase"]);
+    
 
       // Iterate through the controllers to update the database
       for (int i = 0; i < count; i++) {
@@ -88,12 +87,12 @@ class _AddValueState extends State<AddValue> {
         String percentage = persentaseControllers[i].text.trim();
 
         if (i < hintTextMatkul.length) {
-          if (i < widget.db.todoList[widget.index]["persentase"].length) {
-            print("a");
+          if (i < widget.db.todoList[widget.index]["persentase"].length &&
+              percentage.isNotEmpty) {
             widget.db.todoList[widget.index]["persentase"][i] = percentage;
-          } else if (i ==
-              widget.db.todoList[widget.index]["persentase"].length) {
-            // Jika indeks sesuai dengan panjang daftar, tambahkan nilai baru
+          }
+          // Jika indeks sesuai dengan panjang daftar, tambahkan nilai baru
+          else if (i == widget.db.todoList[widget.index]["persentase"].length) {
             widget.db.todoList[widget.index]["persentase"].add(percentage);
           }
           if (value.isNotEmpty && komponen.isNotEmpty) {
@@ -110,28 +109,18 @@ class _AddValueState extends State<AddValue> {
           //Jika komponen nilai dan matkul terisi
         } else {
           if (percentage.isNotEmpty && i < hintTextMatkul.length) {
-            print("c");
+            
             widget.db.todoList[widget.index]["persentase"].add(percentage);
           }
           if (komponen.isNotEmpty) {
             widget.db.todoList[widget.index]["komponen"]
                 [komponen.toLowerCase()] = value;
           }
-
-          // else if (komponen.isEmpty && value.isNotEmpty) {
-          //     widget.db.todoList[widget.index]["komponen"][hintTextMatkul[i]] = value;
-          // }
         }
       }
       widget.db.updateTask();
 
-      // Update the database with the new components and percentages
-
-      // Save the changes to the database
-
-      // Debug prints to check the results
-
-      widget.db.updateTask();
+      
       print(widget.db.todoList[widget.index]["komponen"]);
       print(widget.db.todoList[widget.index]["persentase"]);
     });
