@@ -53,13 +53,13 @@ class _IpkTileState extends State<IpkTile> {
                     Row(
                       children: [
                         Text("Nilai Mata Kuliah: "),
-                        Text(widget.nilaiMatkul),
+                        Text(widget.nilaiMatkul ?? " "),
                       ],
                     ),
                   ],
                 ),
                 Spacer(),
-                Text("1"),
+                Text(widget.nilaiMatkul ?? " "),
               ],
             ),
           ),

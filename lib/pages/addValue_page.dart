@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ipk_kalkulator/Method/Rumus.dart';
 import 'package:ipk_kalkulator/components/component_field.dart';
 import 'package:ipk_kalkulator/database/database.dart';
 
 class AddValue extends StatefulWidget {
-  const AddValue(
-      {super.key,
-      required this.db,
-      required this.index,
-      });
+  const AddValue({
+    super.key,
+    required this.db,
+    required this.index,
+  });
   final Tododatabase db;
   final int index;
-
 
   @override
   State<AddValue> createState() => _AddValueState();
@@ -24,6 +24,7 @@ class _AddValueState extends State<AddValue> {
   late List<String> hintTextNilai = [];
   late List<String> komponen = widget.db.todoList[widget.index]["persentase"];
   late int count;
+  double nilaiKomponenSementara = 0;
 
   @override
   void initState() {
@@ -78,8 +79,6 @@ class _AddValueState extends State<AddValue> {
     setState(() {
       // Initialize the updated components and percentages
 
-    
-
       // Iterate through the controllers to update the database
       for (int i = 0; i < count; i++) {
         String komponen = componentControllers[i].text.trim();
@@ -108,21 +107,30 @@ class _AddValueState extends State<AddValue> {
           }
           //Jika komponen nilai dan matkul terisi
         } else {
-          if (percentage.isNotEmpty && i < hintTextMatkul.length) {
-            
-            widget.db.todoList[widget.index]["persentase"].add(percentage);
-          }
           if (komponen.isNotEmpty) {
+            if (percentage.isNotEmpty) {
+              widget.db.todoList[widget.index]["persentase"].add(percentage);
+            }
             widget.db.todoList[widget.index]["komponen"]
                 [komponen.toLowerCase()] = value;
           }
         }
       }
       widget.db.updateTask();
+      hintTextNilai = List<String>.from(
+          widget.db.todoList[widget.index]["komponen"].values);
 
-      
+      // Perform the final calculation
+      nilaiKomponenSementara = HitungNilaiMatkul(
+          hintTextNilai, widget.db.todoList[widget.index]["persentase"]);
+      nilaiKomponenSementara = HitungNilaiMatkul(
+          hintTextNilai, widget.db.todoList[widget.index]["persentase"]);
+      widget.db.todoList[widget.index]["nilaiMatkul"] = nilaiKomponenSementara;
+      widget.db.updateTask();
       print(widget.db.todoList[widget.index]["komponen"]);
       print(widget.db.todoList[widget.index]["persentase"]);
+      print(nilaiKomponenSementara);
+      print(widget.db.todoList[widget.index]["nilaiMatkul"]);
     });
   }
 

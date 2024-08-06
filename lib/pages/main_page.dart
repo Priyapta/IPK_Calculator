@@ -25,6 +25,7 @@ class _mainPageState extends State<mainPage> {
   final mybox = Hive.box("mybox");
   Tododatabase db = Tododatabase();
   String sks = "1";
+  String nilaiMatkul = "";
   String semester = "1";
   // final ValueNotifier<String> onSksChanged = ValueNotifier<String>("1");
   // final ValueNotifier<String> semesterNotifier = ValueNotifier<String>("1");
@@ -49,18 +50,15 @@ class _mainPageState extends State<mainPage> {
         "sks": sks,
         "semester": semester,
         "komponen": {},
-        "nilai_matkul": "",
         "persentase": [],
       });
+      controllerMatkul.clear();
       db.updateTask();
-      // print(onSksChanged);
-      // print(sks);
-      // print(semester);
+
       print(db.todoList[0]["sks"]);
       print(db.todoList[0]["matkul"]);
-      // print(db.todoList[0]["semester"]);
+
       Navigator.of(context).pop();
-      // db.updateTask();
     });
   }
 
@@ -95,15 +93,19 @@ class _mainPageState extends State<mainPage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-            onPressed: onPressed,
-            icon: Icon(Icons.logout),
+          Row(
+            children: [
+              IconButton(
+                onPressed: addTask,
+                icon: Icon(Icons.add),
+              ),
+              IconButton(
+                onPressed: onPressed,
+                icon: Icon(Icons.logout),
+              ),
+            ],
           )
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: addTask,
-        child: Icon(Icons.add),
       ),
       body: Column(
         children: [
@@ -117,7 +119,7 @@ class _mainPageState extends State<mainPage> {
                 itemBuilder: (context, index) {
                   return IpkTile(
                       judulMatkul: db.todoList[index]["matkul"],
-                      nilaiMatkul: db.todoList[index]["nilai_matkul"],
+                      nilaiMatkul: db.todoList[index]["nilaiMatkul"].toString(),
                       sksMatkul: db.todoList[index]["sks"],
                       onTap: () async {
                         await Navigator.push(
@@ -128,6 +130,9 @@ class _mainPageState extends State<mainPage> {
                                     index: index,
                                   )),
                         );
+                        setState(() {
+                          todoList = db.todoList;
+                        });
                       });
                 }),
           ),

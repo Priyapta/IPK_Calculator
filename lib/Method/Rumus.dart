@@ -3,11 +3,19 @@ void HitungIpk(
   double sks,
 ) {}
 
-double HitungNilaiMatkul(String  ) {
-  return 0;
+double HitungNilaiMatkul(List<String> komponen, List persentase) {
+  double nilaiTotal = 0;
+
+  for (int i = 0; i < komponen.length; i++) {
+    double nilaiMatkul = double.parse(komponen[i]);
+    double persentaseKomponen = double.parse(persentase[i]);
+    nilaiTotal += nilaiMatkul * persentaseKomponen / 100;
+  }
+
+  return nilaiTotal;
 }
 
-double konversiIpk(double nilaiMatkul) {
+double konversiBobot(double nilaiMatkul) {
   if (nilaiMatkul >= 85) {
     return 4.0;
   } else if (nilaiMatkul >= 80) {
