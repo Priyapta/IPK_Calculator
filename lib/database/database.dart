@@ -8,6 +8,13 @@ class Tododatabase {
   //   todoList = [{}];
   // }
   void create() {
+    //{ "matkul": "",
+    //"sks": "" ,
+    // "semester": ,
+    // "komponen": {},
+    // "nilai_matkul": "",
+    //"persentase": [],
+    //}
     todoList = [];
     updateTask();
   }

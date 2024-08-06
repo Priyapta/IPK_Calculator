@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ipk_kalkulator/components/DialogBox.dart';
 import 'package:ipk_kalkulator/components/Ipktile.dart';
+import 'package:ipk_kalkulator/components/circularProgess.dart';
 import 'package:ipk_kalkulator/database/database.dart';
 import 'package:ipk_kalkulator/pages/addValue_page.dart';
 
@@ -103,24 +105,34 @@ class _mainPageState extends State<mainPage> {
         onPressed: addTask,
         child: Icon(Icons.add),
       ),
-      body: ListView.builder(
-          itemCount: todoList.length,
-          itemBuilder: (context, index) {
-            return IpkTile(
-                judulMatkul: db.todoList[index]["matkul"],
-                nilaiMatkul: db.todoList[index]["nilai_matkul"],
-                sksMatkul: db.todoList[index]["sks"],
-                onTap: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddValue(
-                              db: db,
-                              index: index,
-                            )),
-                  );
-                });
-          }),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SemiCircularProgressBar(progress: 0.875),
+          ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: todoList.length,
+                itemBuilder: (context, index) {
+                  return IpkTile(
+                      judulMatkul: db.todoList[index]["matkul"],
+                      nilaiMatkul: db.todoList[index]["nilai_matkul"],
+                      sksMatkul: db.todoList[index]["sks"],
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddValue(
+                                    db: db,
+                                    index: index,
+                                  )),
+                        );
+                      });
+                }),
+          ),
+        ],
+      ),
     );
   }
 }
