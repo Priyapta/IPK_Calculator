@@ -6,10 +6,13 @@ class IpkTile extends StatefulWidget {
     super.key,
     required this.judulMatkul,
     required this.nilaiMatkul,
+    required this.sksMatkul,
     required this.onTap,
   });
   final String judulMatkul;
   final String nilaiMatkul;
+  final String sksMatkul;
+
   final Function()? onTap;
 
   @override
@@ -44,7 +47,7 @@ class _IpkTileState extends State<IpkTile> {
                     Row(
                       children: [
                         Text("SKS: "),
-                        Text(widget.nilaiMatkul),
+                        Text(widget.sksMatkul),
                       ],
                     ),
                     Row(

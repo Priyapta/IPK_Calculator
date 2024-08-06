@@ -28,12 +28,6 @@ class _mainPageState extends State<mainPage> {
   // final ValueNotifier<String> semesterNotifier = ValueNotifier<String>("1");
   List todoList = [];
   void initState() {
-    // onSksChanged.addListener(() {
-    //   print("Selected value: ${onSksChanged.value}");
-    // });
-    // semesterNotifier.addListener(() {
-    //   print("Selected value: ${semesterNotifier.value}");
-    // });
     if (mybox.get("TODOLIST") == null) {
       db.create();
       db.updateTask();
@@ -56,9 +50,13 @@ class _mainPageState extends State<mainPage> {
         "nilai_matkul": "",
         "persentase": [],
       });
+      db.updateTask();
       // print(onSksChanged);
+      // print(sks);
+      // print(semester);
       print(db.todoList[0]["sks"]);
-      print(db.todoList[0]["semester"]);
+      print(db.todoList[0]["matkul"]);
+      // print(db.todoList[0]["semester"]);
       Navigator.of(context).pop();
       // db.updateTask();
     });
@@ -111,6 +109,7 @@ class _mainPageState extends State<mainPage> {
             return IpkTile(
                 judulMatkul: db.todoList[index]["matkul"],
                 nilaiMatkul: db.todoList[index]["nilai_matkul"],
+                sksMatkul: db.todoList[index]["sks"],
                 onTap: () async {
                   await Navigator.push(
                     context,

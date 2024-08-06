@@ -8,15 +8,7 @@ class Tododatabase {
   //   todoList = [{}];
   // }
   void create() {
-    todoList = [
-      {
-        "matkul": "matdis",
-        "semester": "1",
-        "komponen": {"test": "1"},
-        "nilai_matkul": "A",
-        "persentase": [],
-      },
-    ];
+    todoList = [];
     updateTask();
   }
 

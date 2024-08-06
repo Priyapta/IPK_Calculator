@@ -24,12 +24,6 @@ class DialogBox extends StatefulWidget {
 
 class _DialogBoxState extends State<DialogBox> {
   @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.sizeOf(context).width;
     double screenHeight = MediaQuery.sizeOf(context).height;
