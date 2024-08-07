@@ -59,9 +59,8 @@ class _mainPageState extends State<mainPage> {
       });
       controllerMatkul.clear();
       db.updateTask();
-
-      Navigator.of(context).pop();
     });
+    Navigator.of(context).pop();
   }
 
   void cancel() {
@@ -73,6 +72,7 @@ class _mainPageState extends State<mainPage> {
         context: context,
         builder: (context) {
           return DialogBox(
+            hintText: "Input Nama Matkul",
             controller: controllerMatkul,
             onSksChanged: (value) {
               setState(() {
@@ -97,6 +97,18 @@ class _mainPageState extends State<mainPage> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(234, 231, 220, 1.000),
       appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 90,
+            ),
+            Text(
+              "IPK CALCULATOR",
+              style: TextStyle(fontSize: 20),
+            ),
+          ],
+        ),
         actions: [
           Row(
             children: [
@@ -115,8 +127,14 @@ class _mainPageState extends State<mainPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 30),
-            child: SemiCircularProgressBar(progress: ipk / 4),
+            padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 30),
+            child: Center(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SemiCircularProgressBar(progress: ipk / 4),
+              ],
+            )),
           ),
           Expanded(
             child: ListView.builder(

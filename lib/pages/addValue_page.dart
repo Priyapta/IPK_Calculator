@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ipk_kalkulator/Method/Rumus.dart';
+import 'package:ipk_kalkulator/components/DialogBox.dart';
 import 'package:ipk_kalkulator/components/component_field.dart';
+import 'package:ipk_kalkulator/components/mybutton3.dart';
 import 'package:ipk_kalkulator/database/database.dart';
 
 class AddValue extends StatefulWidget {
@@ -20,6 +22,9 @@ class _AddValueState extends State<AddValue> {
   List<TextEditingController> componentControllers = [];
   List<TextEditingController> nilaiControllers = [];
   List<TextEditingController> persentaseControllers = [];
+  TextEditingController controllerMatkul = TextEditingController();
+  String sks = "1";
+  String semester = "1";
   late List<String> hintTextMatkul = [];
   late List<String> hintTextNilai = [];
   late List<String> komponen = widget.db.todoList[widget.index]["persentase"];
@@ -41,7 +46,7 @@ class _AddValueState extends State<AddValue> {
       persentaseControllers.add(TextEditingController());
     }
   }
-
+  //jika kontroller tidak dipakai maka langung dihilangkan
   @override
   void dispose() {
     for (var controller in componentControllers) {
@@ -62,6 +67,43 @@ class _AddValueState extends State<AddValue> {
       componentControllers.add(TextEditingController());
       nilaiControllers.add(TextEditingController());
       persentaseControllers.add(TextEditingController());
+    });
+  }
+
+  void cancel() {
+    Navigator.of(context).pop();
+  }
+  //untuk edit matkul
+  void Edit() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return DialogBox(
+            hintText: "Edit Nama Matkul",
+            controller: controllerMatkul,
+            onSksChanged: (value) {
+              setState(() {
+                sks = value;
+              });
+            },
+            onSemesterChanged: (value) {
+              setState(() {
+                semester = value;
+              });
+            },
+            saveTask: editTask,
+            cancel: cancel,
+          );
+        });
+  }
+
+  void editTask() {
+    setState(() {
+      widget.db.todoList[widget.index]["matkul"] = controllerMatkul.text;
+      widget.db.todoList[widget.index]["sks"] = sks;
+      widget.db.todoList[widget.index]["semester"] = semester;
+      widget.db.updateTask();
+      Navigator.of(context).pop();
     });
   }
 
@@ -129,10 +171,6 @@ class _AddValueState extends State<AddValue> {
       widget.db.todoList[widget.index]["index"] = Index(nilaiKomponenSementara);
       widget.db.todoList[widget.index]["lulus"] = lulus(nilaiKomponenSementara);
       widget.db.updateTask();
-      print(widget.db.todoList[widget.index]["komponen"]);
-      print(widget.db.todoList[widget.index]["persentase"]);
-      print(nilaiKomponenSementara);
-      print(widget.db.todoList[widget.index]["nilaiMatkul"]);
     });
   }
 
@@ -140,6 +178,15 @@ class _AddValueState extends State<AddValue> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.sizeOf(context).width;
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: ElevatedButton(onPressed: Edit, child: Text("Edit")),
+          )
+        ],
+      ),
+      backgroundColor: Color.fromRGBO(234, 231, 220, 1.000),
       floatingActionButton: FloatingActionButton(
         onPressed: addComponent,
         child: Icon(Icons.add),

@@ -11,12 +11,14 @@ class DialogBox extends StatefulWidget {
     required this.onSemesterChanged,
     required this.saveTask,
     required this.cancel,
+    required this.hintText,
   });
   final TextEditingController controller;
   final ValueChanged<String> onSksChanged;
   final ValueChanged<String> onSemesterChanged;
   final VoidCallback saveTask;
   final VoidCallback cancel;
+  final String hintText;
 
   @override
   State<DialogBox> createState() => _DialogBoxState();
@@ -30,7 +32,7 @@ class _DialogBoxState extends State<DialogBox> {
     return AlertDialog(
       backgroundColor: Colors.grey[400],
       content: Container(
-        height: screenHeight / 4,
+        height: screenHeight / 3.8,
         width: screenWidth / 8,
         child: Column(
           children: [
@@ -38,7 +40,7 @@ class _DialogBoxState extends State<DialogBox> {
               controller: widget.controller,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: "Input Nama Matkul",
+                hintText: widget.hintText,
               ),
             ),
             Padding(
