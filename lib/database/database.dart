@@ -4,10 +4,6 @@ class Tododatabase {
   List<Map<String, dynamic>> todoList = [];
   final mybox = Hive.box("mybox");
 
-  // void database() {
-  //   todoList = [{}];
-  // }
-  void create() {
     //{ "matkul": "",
     //"sks": "" ,
     // "semester": ,
@@ -15,6 +11,7 @@ class Tododatabase {
     // "nilai_matkul": "",
     //"persentase": [],
     //}
+  void create() {
     todoList = [];
     updateTask();
   }

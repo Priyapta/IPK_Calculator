@@ -7,11 +7,15 @@ class IpkTile extends StatefulWidget {
     required this.judulMatkul,
     required this.nilaiMatkul,
     required this.sksMatkul,
+    required this.index,
+    required this.lulus,
     required this.onTap,
   });
   final String judulMatkul;
   final String nilaiMatkul;
   final String sksMatkul;
+  final String index;
+  final bool lulus;
 
   final Function()? onTap;
 
@@ -59,12 +63,17 @@ class _IpkTileState extends State<IpkTile> {
                   ],
                 ),
                 Spacer(),
-                Text(widget.nilaiMatkul ?? " "),
+                Text(
+                  widget.index,
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                ),
               ],
             ),
           ),
           decoration: BoxDecoration(
-            color: Colors.grey[300],
+            color: widget.lulus
+                ? Color.fromRGBO(136, 171, 142, 1.000)
+                : Color.fromRGBO(233, 128, 116, 1.000),
             borderRadius: BorderRadius.circular(5),
           ),
         ),

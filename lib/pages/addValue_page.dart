@@ -120,12 +120,14 @@ class _AddValueState extends State<AddValue> {
       hintTextNilai = List<String>.from(
           widget.db.todoList[widget.index]["komponen"].values);
 
-      // Perform the final calculation
+      // Hitung dari nilaiMatkul
       nilaiKomponenSementara = HitungNilaiMatkul(
           hintTextNilai, widget.db.todoList[widget.index]["persentase"]);
       nilaiKomponenSementara = HitungNilaiMatkul(
           hintTextNilai, widget.db.todoList[widget.index]["persentase"]);
       widget.db.todoList[widget.index]["nilaiMatkul"] = nilaiKomponenSementara;
+      widget.db.todoList[widget.index]["index"] = Index(nilaiKomponenSementara);
+      widget.db.todoList[widget.index]["lulus"] = lulus(nilaiKomponenSementara);
       widget.db.updateTask();
       print(widget.db.todoList[widget.index]["komponen"]);
       print(widget.db.todoList[widget.index]["persentase"]);

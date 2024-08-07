@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:ipk_kalkulator/Method/Rumus.dart';
 import 'package:ipk_kalkulator/components/DialogBox.dart';
 import 'package:ipk_kalkulator/components/Ipktile.dart';
 import 'package:ipk_kalkulator/components/circularProgess.dart';
@@ -30,6 +31,7 @@ class _mainPageState extends State<mainPage> {
   // final ValueNotifier<String> onSksChanged = ValueNotifier<String>("1");
   // final ValueNotifier<String> semesterNotifier = ValueNotifier<String>("1");
   List todoList = [];
+  double ipk = 0;
   void initState() {
     if (mybox.get("TODOLIST") == null) {
       db.create();
@@ -49,14 +51,14 @@ class _mainPageState extends State<mainPage> {
         "matkul": controllerMatkul.text,
         "sks": sks,
         "semester": semester,
+        "index": "",
+        "nilaiMatkul": "",
         "komponen": {},
         "persentase": [],
+        "lulus": false
       });
       controllerMatkul.clear();
       db.updateTask();
-
-      print(db.todoList[0]["sks"]);
-      print(db.todoList[0]["matkul"]);
 
       Navigator.of(context).pop();
     });
@@ -90,7 +92,10 @@ class _mainPageState extends State<mainPage> {
 
   @override
   Widget build(BuildContext context) {
+    ipk = konversiBobot(HitungIpk((db.todoList)));
+
     return Scaffold(
+      backgroundColor: Color.fromRGBO(234, 231, 220, 1.000),
       appBar: AppBar(
         actions: [
           Row(
@@ -110,8 +115,8 @@ class _mainPageState extends State<mainPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SemiCircularProgressBar(progress: 0.875),
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 30),
+            child: SemiCircularProgressBar(progress: ipk / 4),
           ),
           Expanded(
             child: ListView.builder(
@@ -121,6 +126,8 @@ class _mainPageState extends State<mainPage> {
                       judulMatkul: db.todoList[index]["matkul"],
                       nilaiMatkul: db.todoList[index]["nilaiMatkul"].toString(),
                       sksMatkul: db.todoList[index]["sks"],
+                      index: db.todoList[index]["index"],
+                      lulus: db.todoList[index]["lulus"],
                       onTap: () async {
                         await Navigator.push(
                           context,
