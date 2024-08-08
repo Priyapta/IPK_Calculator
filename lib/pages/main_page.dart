@@ -136,6 +136,10 @@ class _mainPageState extends State<mainPage> {
               ],
             )),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text(Expression(ipk))],
+          ),
           Expanded(
             child: ListView.builder(
                 itemCount: todoList.length,
