@@ -6,8 +6,10 @@ import 'package:ipk_kalkulator/Method/Rumus.dart';
 import 'package:ipk_kalkulator/components/DialogBox.dart';
 import 'package:ipk_kalkulator/components/Ipktile.dart';
 import 'package:ipk_kalkulator/components/circularProgess.dart';
+import 'package:ipk_kalkulator/components/piechart.dart';
 import 'package:ipk_kalkulator/database/database.dart';
 import 'package:ipk_kalkulator/pages/addValue_page.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class mainPage extends StatefulWidget {
   const mainPage({super.key});
@@ -90,6 +92,7 @@ class _mainPageState extends State<mainPage> {
         });
   }
 
+  List<double> pieValues = [4, 6, 8, 3, 5];
   @override
   Widget build(BuildContext context) {
     ipk = konversiBobot(HitungIpk((db.todoList)));
@@ -127,19 +130,15 @@ class _mainPageState extends State<mainPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 30),
-            child: Center(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SemiCircularProgressBar(progress: ipk / 4),
-              ],
-            )),
+            padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 20),
+            child: const CustomPie(
+              values: [4, 6, 8, 3, 5],
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text(Expression(ipk))],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [Text(Expression(ipk, db.todoList.length))],
+          // ),
           Expanded(
             child: ListView.builder(
                 itemCount: todoList.length,

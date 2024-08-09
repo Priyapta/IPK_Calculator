@@ -14,7 +14,7 @@ double HitungIpk(
   return nilaiIpk / jumlahSks;
 }
 
-String Expression(double nilai) {
+String Expression(double nilai, int length) {
   if (nilai > 3.5) {
     return "Kamu Hebat Tetap Konsisten Terus yaa!!!!";
   } else if (nilai > 3) {
@@ -23,6 +23,8 @@ String Expression(double nilai) {
     return "Jangan Patah Semangat Masih Banyak Harapan";
   } else if (nilai > 2) {
     return "Ini Bukan Akhir Dari Segalanya";
+  } else if (length == 0) {
+    return "";
   }
   return "Perjalananmu Tidak Berakhir Disini!!!! Jangan Menyerah";
 }
@@ -33,7 +35,7 @@ double ip(
   double jumlahSks = 0;
   double nilaiIpk = 0;
   for (int i = 0; i < list.length; i++) {
-    if (list[i]["semester"] == i+1) {
+    if (list[i]["semester"] == i + 1) {
       nilaiIpk += list[i]["nilaiMatkul"] * list[i]["sks"];
       jumlahSks += list[i]["sks"];
     }
