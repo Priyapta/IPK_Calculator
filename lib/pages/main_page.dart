@@ -130,11 +130,16 @@ class _mainPageState extends State<mainPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 20),
-            child: const CustomPie(
-              values: [4, 6, 8, 3, 5],
+            padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 100),
+            child: SizedBox(
+              height: 400,
+              width: 400,
+              child: const CustomPie(
+                values: [1, 2, 3, 4, 5, 6, 7, 8],
+              ),
             ),
           ),
+
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.center,
           //   children: [Text(Expression(ipk, db.todoList.length))],
