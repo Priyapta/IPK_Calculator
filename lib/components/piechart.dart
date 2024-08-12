@@ -24,48 +24,48 @@ class _CustomPieState extends State<CustomPie> {
           child: Container(
             margin: EdgeInsets.all(10),
             width: size /
-                2, // Set the width and height based on the calculated size
-            height: size / 2,
+                4, // Set the width and height based on the calculated size
+            height: size / 4,
             child: PieChart(
               PieChartData(
-                pieTouchData: PieTouchData(
-                  touchCallback: (FlTouchEvent e, PieTouchResponse? r) {
-                    setState(() {
-                      if (!e.isInterestedForInteractions ||
-                          r == null ||
-                          r.touchedSection == null) {
-                        _touchedIndex = -1;
-                      } else {
-                        _touchedIndex = r.touchedSection!.touchedSectionIndex;
-                      }
-                    });
-                  },
-                ),
-                sections: widget.values.asMap().entries.map((entry) {
-                  int index = entry.key;
-                  double value = entry.value;
+                  pieTouchData: PieTouchData(
+                    touchCallback: (FlTouchEvent e, PieTouchResponse? r) {
+                      setState(() {
+                        if (!e.isInterestedForInteractions ||
+                            r == null ||
+                            r.touchedSection == null) {
+                          _touchedIndex = -1;
+                        } else {
+                          _touchedIndex = r.touchedSection!.touchedSectionIndex;
+                        }
+                      });
+                    },
+                  ),
+                  sections: widget.values.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    double value = entry.value;
 
-                  return PieChartSectionData(
-                    radius: _touchedIndex == index ? 80 : 60,
-                    borderSide: _touchedIndex == index
-                        ? BorderSide(width: 3, color: Colors.black)
-                        : BorderSide(width: 0, color: Colors.transparent),
-                    value: value,
-                    color: _touchedIndex == index
-                        ? Colors.redAccent
-                        : Colors.blueAccent,
-                    title: 'smt ${value.toStringAsFixed(1)}',
-                    titleStyle: TextStyle(
-                      fontSize: _touchedIndex == index ? 20 : 16,
-                      fontWeight: _touchedIndex == index
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                    ),
-                  );
-                }).toList(),
-                centerSpaceRadius:
-                    50, // Adjust center space radius based on size
-              ),
+                    return PieChartSectionData(
+                      radius: _touchedIndex == index ? 80 : 60,
+                      borderSide: _touchedIndex == index
+                          ? BorderSide(width: 3, color: Colors.black)
+                          : BorderSide(width: 0, color: Colors.transparent),
+                      value: value,
+                      color: _touchedIndex == index
+                          ? Colors.redAccent
+                          : const Color.fromARGB(255, 216, 187, 187),
+                      title: 'smt ${value.toStringAsFixed(1)}',
+                      titleStyle: TextStyle(
+                        fontSize: _touchedIndex == index ? 20 : 16,
+                        fontWeight: _touchedIndex == index
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    );
+                  }).toList(),
+                  centerSpaceRadius: 100,
+                  sectionsSpace: 4 // Adjust center space radius based on size
+                  ),
             ),
           ),
         );

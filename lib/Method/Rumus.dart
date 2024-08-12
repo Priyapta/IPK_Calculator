@@ -35,12 +35,35 @@ double ip(
   double jumlahSks = 0;
   double nilaiIpk = 0;
   for (int i = 0; i < list.length; i++) {
-    if (list[i]["semester"] == i + 1) {
+    if (list[i]["semester"] == (i + 1).toString()) {
       nilaiIpk += list[i]["nilaiMatkul"] * list[i]["sks"];
       jumlahSks += list[i]["sks"];
     }
   }
   return nilaiIpk / jumlahSks;
+}
+
+void addKeys(List<Map<String, dynamic>> list, Map<String, double> myList) {
+  ;
+  for (int i = 0; i < list.length; i++) {
+    if (!myList.containsKey(myList[list[i]["semester"]])) {
+      myList[list[i]["semester"]] = 0;
+    }
+  }
+}
+
+void addValues(List<Map<String, dynamic>> list, Map<String, double> myList) {
+ 
+    for (int z = 0; z < list.length; z++) {
+      var semester = list[z]["semester"];
+      var nilai = list[z]["nilaiMatkul"];
+      if (myList.containsKey(list[z]["semester"])) {
+        myList[semester] = (myList[semester] ?? 0) + nilai;
+      } else {
+        myList[semester] = 0;
+      }
+    }
+  
 }
 
 double HitungNilaiMatkul(List<String> komponen, List persentase) {

@@ -30,6 +30,7 @@ class _mainPageState extends State<mainPage> {
   String sks = "1";
   String nilaiMatkul = "";
   String semester = "1";
+  Map<String, double> myMap = {};
   // final ValueNotifier<String> onSksChanged = ValueNotifier<String>("1");
   // final ValueNotifier<String> semesterNotifier = ValueNotifier<String>("1");
   List todoList = [];
@@ -54,7 +55,7 @@ class _mainPageState extends State<mainPage> {
         "sks": sks,
         "semester": semester,
         "index": "",
-        "nilaiMatkul": "",
+        "nilaiMatkul": 0,
         "komponen": {},
         "persentase": [],
         "lulus": false

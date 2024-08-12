@@ -8,7 +8,7 @@ class Tododatabase {
     //"sks": "" ,
     // "semester": ,
     // "komponen": {},
-    // "nilai_matkul": "",
+    // "nilaiMatkul": "",
     //"persentase": [],
     //}
   void create() {
