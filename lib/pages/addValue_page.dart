@@ -100,7 +100,7 @@ class _AddValueState extends State<AddValue> {
   void editTask() {
     setState(() {
       widget.db.todoList[widget.index]["matkul"] = controllerMatkul.text;
-      widget.db.todoList[widget.index]["sks"] = sks;
+      widget.db.todoList[widget.index]["sks"] = int.parse(sks);
       widget.db.todoList[widget.index]["semester"] = semester;
       widget.db.updateTask();
       Navigator.of(context).pop();

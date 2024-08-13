@@ -53,18 +53,45 @@ void addKeys(List<Map<String, dynamic>> list, Map<String, double> myList) {
 }
 
 void addValues(List<Map<String, dynamic>> list, Map<String, double> myList) {
- 
-    for (int z = 0; z < list.length; z++) {
-      var semester = list[z]["semester"];
+  List<String> listKeys = List<String>.from(myList.keys);
+  for (int z = 0; z < myList.length; z++) {
+    int sks = 0;
+    double nilai = 0;
+    var semester = listKeys[z];
+    for (int i = 0; i < list.length; i++) {
       var nilai = list[z]["nilaiMatkul"];
-      if (myList.containsKey(list[z]["semester"])) {
-        myList[semester] = (myList[semester] ?? 0) + nilai;
-      } else {
-        myList[semester] = 0;
+      if (list[i]["semester"] == listKeys[z]) {
+        sks += int.parse(list[i]["sks"]);
+        nilai += double.parse(list[i]["nilaiMatkul"]);
       }
     }
-  
+    if (!myList.containsKey(semester)) {
+      myList[semester] = 0;
+    } else {
+      myList[semester] = nilai / sks;
+      print(myList[semester]);
+    }
+  }
 }
+
+// void sksSeperate(List<Map<String, dynamic>> list, Map<String, double> myList) {
+//   List<String> listKeys = List<String>.from(myList.keys);
+//   for (int z = 0; z < myList.length;) {
+//     var semester = listKeys[z];
+
+//     int sksTemporary = 0;
+//     for (int i = 0; i < list.length; i++) {
+//       if (myList.containsKey(list[z]["semester"]) &&
+//           list[i]["semester"] == semester) {
+//         sksTemporary += int.parse(list[i]["semester"]);
+//         myList[semester] = (myList[semester] ?? 0) + nilai;
+//         print(myList[semester]);
+//       } else {
+//         myList[semester] = 0;
+//       }
+//     }
+//   }
+// }
 
 double HitungNilaiMatkul(List<String> komponen, List persentase) {
   double nilaiTotal = 0;

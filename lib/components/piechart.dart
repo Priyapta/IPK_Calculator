@@ -2,9 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class CustomPie extends StatefulWidget {
-  final List<double> values;
+  final Map<String, double> value;
 
-  const CustomPie({super.key, required this.values});
+  const CustomPie({super.key, required this.value});
 
   @override
   State<CustomPie> createState() => _CustomPieState();
@@ -12,6 +12,13 @@ class CustomPie extends StatefulWidget {
 
 class _CustomPieState extends State<CustomPie> {
   int _touchedIndex = -1;
+  late List<double> values;
+  @override
+  void initState() {
+    super.initState();
+    values = widget.value.values.toList();
+    print(values); // Inisialisasi `values` dari `widget.value`
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +48,7 @@ class _CustomPieState extends State<CustomPie> {
                       });
                     },
                   ),
-                  sections: widget.values.asMap().entries.map((entry) {
+                  sections: values.asMap().entries.map((entry) {
                     int index = entry.key;
                     double value = entry.value;
 
@@ -63,7 +70,7 @@ class _CustomPieState extends State<CustomPie> {
                       ),
                     );
                   }).toList(),
-                  centerSpaceRadius: 100,
+                  centerSpaceRadius: 80,
                   sectionsSpace: 4 // Adjust center space radius based on size
                   ),
             ),

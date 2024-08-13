@@ -30,7 +30,7 @@ class _mainPageState extends State<mainPage> {
   String sks = "1";
   String nilaiMatkul = "";
   String semester = "1";
-  Map<String, double> myMap = {};
+  Map<String, double> myMaps = {"1": 3, "2": 4};
   // final ValueNotifier<String> onSksChanged = ValueNotifier<String>("1");
   // final ValueNotifier<String> semesterNotifier = ValueNotifier<String>("1");
   List todoList = [];
@@ -52,7 +52,7 @@ class _mainPageState extends State<mainPage> {
     setState(() {
       db.todoList.add({
         "matkul": controllerMatkul.text,
-        "sks": sks,
+        "sks": int.parse(sks),
         "semester": semester,
         "index": "",
         "nilaiMatkul": 0,
@@ -97,6 +97,7 @@ class _mainPageState extends State<mainPage> {
   @override
   Widget build(BuildContext context) {
     ipk = konversiBobot(HitungIpk((db.todoList)));
+    addValues(db.todoList, myMaps);
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(234, 231, 220, 1.000),
@@ -135,8 +136,8 @@ class _mainPageState extends State<mainPage> {
             child: SizedBox(
               height: 400,
               width: 400,
-              child: const CustomPie(
-                values: [1, 2, 3, 4, 5, 6, 7, 8],
+              child: CustomPie(
+                value: myMaps,
               ),
             ),
           ),
@@ -152,7 +153,7 @@ class _mainPageState extends State<mainPage> {
                   return IpkTile(
                       judulMatkul: db.todoList[index]["matkul"],
                       nilaiMatkul: db.todoList[index]["nilaiMatkul"].toString(),
-                      sksMatkul: db.todoList[index]["sks"],
+                      sksMatkul: db.todoList[index]["sks"].toString(),
                       index: db.todoList[index]["index"],
                       lulus: db.todoList[index]["lulus"],
                       onTap: () async {
