@@ -8,6 +8,7 @@ class IpkTile extends StatefulWidget {
     required this.nilaiMatkul,
     required this.sksMatkul,
     required this.index,
+    required this.semester,
     required this.lulus,
     required this.onTap,
   });
@@ -16,6 +17,7 @@ class IpkTile extends StatefulWidget {
   final String sksMatkul;
   final String index;
   final bool lulus;
+  final String semester;
 
   final Function()? onTap;
 
@@ -46,6 +48,12 @@ class _IpkTileState extends State<IpkTile> {
                           style: TextStyle(
                               fontSize: 30, fontWeight: FontWeight.bold),
                         ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text("semester: "),
+                        Text(widget.semester),
                       ],
                     ),
                     Row(

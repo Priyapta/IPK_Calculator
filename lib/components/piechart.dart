@@ -11,13 +11,16 @@ class CustomPie extends StatefulWidget {
 }
 
 class _CustomPieState extends State<CustomPie> {
+  late List<String> keys;
+
   int _touchedIndex = -1;
   late List<double> values;
   @override
   void initState() {
     super.initState();
     values = widget.value.values.toList();
-    print(values); // Inisialisasi `values` dari `widget.value`
+    keys = widget.value.keys.toList();
+    // print(values); // Inisialisasi `values` dari `widget.value`
   }
 
   @override
@@ -61,7 +64,8 @@ class _CustomPieState extends State<CustomPie> {
                       color: _touchedIndex == index
                           ? Colors.redAccent
                           : const Color.fromARGB(255, 216, 187, 187),
-                      title: 'smt ${value.toStringAsFixed(1)}',
+                      title:
+                          'smt ${keys[index]}\n(${value.toStringAsFixed(1)})',
                       titleStyle: TextStyle(
                         fontSize: _touchedIndex == index ? 20 : 16,
                         fontWeight: _touchedIndex == index

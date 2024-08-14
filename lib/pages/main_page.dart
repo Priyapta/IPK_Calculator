@@ -30,7 +30,7 @@ class _mainPageState extends State<mainPage> {
   String sks = "1";
   String nilaiMatkul = "";
   String semester = "1";
-  Map<String, double> myMaps = {"1": 3, "2": 4};
+  Map<String, double> myMaps = {};
   // final ValueNotifier<String> onSksChanged = ValueNotifier<String>("1");
   // final ValueNotifier<String> semesterNotifier = ValueNotifier<String>("1");
   List todoList = [];
@@ -45,14 +45,24 @@ class _mainPageState extends State<mainPage> {
     setState(() {
       todoList = db.todoList;
     });
+    updatePieData();
     super.initState();
+  }
+
+  void updatePieData() {
+    setState(() {
+      myMaps = Map.from(myMaps);
+      addKeys(db.todoList, myMaps);
+      addValues(db.todoList, myMaps);
+      ipk = konversiBobot(HitungIpk(db.todoList));
+    });
   }
 
   void saveTask() {
     setState(() {
       db.todoList.add({
         "matkul": controllerMatkul.text,
-        "sks": int.parse(sks),
+        "sks": sks,
         "semester": semester,
         "index": "",
         "nilaiMatkul": 0,
@@ -96,8 +106,7 @@ class _mainPageState extends State<mainPage> {
   List<double> pieValues = [4, 6, 8, 3, 5];
   @override
   Widget build(BuildContext context) {
-    ipk = konversiBobot(HitungIpk((db.todoList)));
-    addValues(db.todoList, myMaps);
+    updatePieData();
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(234, 231, 220, 1.000),
@@ -133,13 +142,16 @@ class _mainPageState extends State<mainPage> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 100),
-            child: SizedBox(
-              height: 400,
-              width: 400,
-              child: CustomPie(
-                value: myMaps,
-              ),
-            ),
+            child: StatefulBuilder(builder: (context, setState) {
+              return SizedBox(
+                height: 400,
+                width: 400,
+                child: CustomPie(
+                  key: ValueKey(myMaps.hashCode),
+                  value: myMaps,
+                ),
+              );
+            }),
           ),
 
           // Row(
@@ -153,6 +165,7 @@ class _mainPageState extends State<mainPage> {
                   return IpkTile(
                       judulMatkul: db.todoList[index]["matkul"],
                       nilaiMatkul: db.todoList[index]["nilaiMatkul"].toString(),
+                      semester: db.todoList[index]["semester"],
                       sksMatkul: db.todoList[index]["sks"].toString(),
                       index: db.todoList[index]["index"],
                       lulus: db.todoList[index]["lulus"],
@@ -167,6 +180,7 @@ class _mainPageState extends State<mainPage> {
                         );
                         setState(() {
                           todoList = db.todoList;
+                          updatePieData();
                         });
                       });
                 }),
