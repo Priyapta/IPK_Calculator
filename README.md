@@ -15,3 +15,16 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 # IPK_Calculator
+
+see current project:
+https://ipk-mini-project.web.app/
+
+
+Feature:
+- login using username & password
+- Calculate IPK 
+
+OnProgress:
+- Calculate IP
+- Summary  subject  of each semester
+- Update on Your Input Subject title
