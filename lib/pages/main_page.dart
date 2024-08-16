@@ -58,21 +58,42 @@ class _mainPageState extends State<mainPage> {
     });
   }
 
+  void wrongMessage(String Message) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            backgroundColor: Colors.red,
+            title: Container(
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                child: Text(Message)),
+          );
+        });
+  }
+
   void saveTask() {
-    setState(() {
-      db.todoList.add({
-        "matkul": controllerMatkul.text,
-        "sks": sks,
-        "semester": semester,
-        "index": "",
-        "nilaiMatkul": 0,
-        "komponen": {},
-        "persentase": [],
-        "lulus": false
+    if (controllerMatkul.text.isEmpty) {
+      return wrongMessage("Isi Nama Matkul");
+    } else {
+      setState(() {
+        db.todoList.add({
+          "matkul": controllerMatkul.text,
+          "sks": sks,
+          "semester": semester,
+          "index": "",
+          "nilaiMatkul": 0,
+          "komponen": {},
+          "persentase": [],
+          "lulus": false
+        });
+        controllerMatkul.clear();
+        db.updateTask();
       });
-      controllerMatkul.clear();
-      db.updateTask();
-    });
+    }
+
     Navigator.of(context).pop();
   }
 
