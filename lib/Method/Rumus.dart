@@ -60,7 +60,7 @@ void addValues(List<Map<String, dynamic>> list, Map<String, double> myList) {
     var semester = listKeys[z];
 
     for (int i = 0; i < list.length; i++) {
-      if (list[i]["semester"] == semester) {
+      if (list[i]["semester"] == semester && list[i]["nilaiMatkul"] != 0) {
         double sks = double.parse(list[i]["sks"]);
         double nilaiMatkul = list[i]["nilaiMatkul"];
 
@@ -74,6 +74,10 @@ void addValues(List<Map<String, dynamic>> list, Map<String, double> myList) {
       myList[semester] = totalSks > 0 ? (totalNilai / totalSks) : 0;
     }
   }
+}
+
+bool hasValidData(Map<String, double> data) {
+  return data.values.any((value) => value > 0);
 }
 
 // void sksSeperate(List<Map<String, dynamic>> list, Map<String, double> myList) {
