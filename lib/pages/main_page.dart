@@ -107,7 +107,6 @@ class _mainPageState extends State<mainPage> {
       db.updateTask();
       todoList = db.todoList;
       updatePieData();
-      print(todoList);
     });
   }
 
@@ -170,8 +169,6 @@ class _mainPageState extends State<mainPage> {
           : ListView.builder(
               itemCount: todoList.length + 1, // +1 for the PieChart
               itemBuilder: (context, index) {
-                print(index);
-                print(todoList.length);
                 if (index == 0) {
                   if (hasValidData(myMaps)) {
                     return SizedBox(

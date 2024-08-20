@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:ipk_kalkulator/Method/Rumus.dart';
 import 'package:ipk_kalkulator/components/DialogBox.dart';
 import 'package:ipk_kalkulator/components/component_field.dart';
@@ -46,6 +47,7 @@ class _AddValueState extends State<AddValue> {
       persentaseControllers.add(TextEditingController());
     }
   }
+
   //jika kontroller tidak dipakai maka langung dihilangkan
   @override
   void dispose() {
@@ -70,9 +72,38 @@ class _AddValueState extends State<AddValue> {
     });
   }
 
+  void deleteComponent(int index) {
+    setState(() {
+      widget.db.todoList[widget.index]["komponen"]
+          .remove(hintTextMatkul[index]);
+      widget.db.todoList[widget.index]["persentase"].removeAt(index);
+
+      componentControllers.removeAt(index);
+      nilaiControllers.removeAt(index);
+      persentaseControllers.removeAt(index);
+
+      // Kurangi jumlah count
+      count--;
+
+      // Perbarui hintTextMatkul dan hintTextNilai
+      hintTextMatkul =
+          List<String>.from(widget.db.todoList[widget.index]["komponen"].keys);
+      hintTextNilai = List<String>.from(
+          widget.db.todoList[widget.index]["komponen"].values);
+
+      widget.db.todoList[widget.index]["nilaiMatkul"] = nilaiKomponenSementara;
+      widget.db.todoList[widget.index]["index"] = Index(nilaiKomponenSementara);
+      widget.db.todoList[widget.index]["lulus"] = lulus(nilaiKomponenSementara);
+
+      // Update database
+      widget.db.updateTask();
+    });
+  }
+
   void cancel() {
     Navigator.of(context).pop();
   }
+
   //untuk edit matkul
   void Edit() {
     showDialog(
@@ -158,6 +189,7 @@ class _AddValueState extends State<AddValue> {
           }
         }
       }
+      //Perhitungan dari index dan nilai matkul
       widget.db.updateTask();
       hintTextNilai = List<String>.from(
           widget.db.todoList[widget.index]["komponen"].values);
@@ -179,6 +211,7 @@ class _AddValueState extends State<AddValue> {
     double screenWidth = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
+        title: Center(child: Text("Komponen Nilai")),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -211,7 +244,7 @@ class _AddValueState extends State<AddValue> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Text(
-                                  "Nama Matakuliah",
+                                  "Matakuliah",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -277,6 +310,17 @@ class _AddValueState extends State<AddValue> {
                             ],
                           ),
                         ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    deleteComponent(index);
+                                  },
+                                  icon: Icon(Icons.delete))
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ],
