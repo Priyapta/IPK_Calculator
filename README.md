@@ -8,9 +8,11 @@ https://ipk-mini-project.web.app/
 
 Feature:
 - login using username & password
-- Calculate IPK 
+- Calculate IP
+- Update on Your Input Subject title
+- Delete Subject using slidable
 
 OnProgress:
-- Calculate IP
 - Summary  subject  of each semester
-- Update on Your Input Subject title
+- Calculate IPK
+
