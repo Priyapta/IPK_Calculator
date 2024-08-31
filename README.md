@@ -11,7 +11,7 @@ Feature:
 - Calculate IP
 - Update on Your Input Subject title
 - Delete Subject using slidable
-- -Using local Database(Hive)
+- Using local Database(Hive)
 
 OnProgress:
 - Summary  subject  of each semester
