@@ -10,7 +10,7 @@ Feature:
 - login using username & password
 - Calculate IP
 - Update on Your Input Subject title
-- Delete Subject using slidable
+- Delete Subject using slidable (Slide left your current Subject it will appear an delete button)
 - Using local Database(Hive)
 
 OnProgress:
