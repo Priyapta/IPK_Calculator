@@ -150,7 +150,30 @@ class _mainPageState extends State<mainPage> {
   }
 
   void showIPK() {
-    showNilai(nilaiIpk: HitungIpk(db.todoList));
+    // Calculate the IPK value
+    double ipk = HitungIpk(db.todoList);
+
+    // Show the IPK in an AlertDialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("IPK Anda"),
+          content: Text(
+            "Nilai IPK: ${ipk.toStringAsFixed(2)}", // Display IPK with 2 decimal points
+            style: TextStyle(fontSize: 18),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -160,20 +183,25 @@ class _mainPageState extends State<mainPage> {
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(216, 195, 165, 500),
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(width: 90),
             Text(
-              "IPK CALCULATOR",
-              style: TextStyle(fontSize: 20, color: Colors.black),
+              "IPKCALC",
+              style: TextStyle(
+                fontSize: 15, color: Colors.black, fontFamily: "ToyStory",
+                // Tambahkan ketebalan font
+                letterSpacing: 1.2,
+              ),
             ),
-            
           ],
         ),
         actions: [
           Row(
             children: [
-              // FloatingA(onPressed: showIPK),
+              TextButton(
+                onPressed: showIPK,
+                child: Text("IPK"),
+              ),
               IconButton(
                 onPressed: addTask,
                 icon: Icon(
@@ -226,11 +254,23 @@ class _mainPageState extends State<mainPage> {
                       onTap: () async {
                         await Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => AddValue(
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    AddValue(
                               db: db,
                               index: index - 1,
                             ),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                            transitionDuration: Duration(
+                                milliseconds:
+                                    300), // Adjust the duration if needed
                           ),
                         );
                         setState(() {
