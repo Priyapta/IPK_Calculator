@@ -103,6 +103,7 @@ class _AddValueState extends State<AddValue> {
   void cancel() {
     Navigator.of(context).pop();
   }
+  
 
   //untuk edit matkul
   void Edit() {
@@ -188,6 +189,7 @@ class _AddValueState extends State<AddValue> {
                 [komponen.toLowerCase()] = value;
           }
         }
+        Navigator.of(context).pop();
       }
       //Perhitungan dari index dan nilai matkul
       widget.db.updateTask();

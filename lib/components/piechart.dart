@@ -62,8 +62,8 @@ class _CustomPieState extends State<CustomPie> {
                               : BorderSide(width: 0, color: Colors.transparent),
                           value: value,
                           color: _touchedIndex == index
-                              ? Colors.redAccent
-                              : const Color.fromARGB(255, 216, 187, 187),
+                              ? Colors.blue
+                              : const Color.fromARGB(255, 71, 115, 163),
                           title:
                               'smt ${keys[index]}\n(${value.toStringAsFixed(1)})',
                           titleStyle: TextStyle(

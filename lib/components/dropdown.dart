@@ -15,6 +15,7 @@ class _DropDownState extends State<DropDown> {
     super.initState();
     if (widget.items.isNotEmpty) {
       dropdownValue = widget.items.first;
+      print(dropdownValue);
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:ipk_kalkulator/Method/Rumus.dart';
 import 'package:ipk_kalkulator/components/DialogBox.dart';
 import 'package:ipk_kalkulator/components/Ipktile.dart';
 import 'package:ipk_kalkulator/components/piechart.dart';
+import 'package:ipk_kalkulator/components/show_ip.dart';
 import 'package:ipk_kalkulator/database/database.dart';
 import 'package:ipk_kalkulator/pages/addValue_page.dart';
 
@@ -22,7 +23,7 @@ class _mainPageState extends State<mainPage> {
   String nilaiMatkul = "";
   String semester = "1";
   Map<String, double> myMaps = {};
-  List todoList = [];
+  List<Map<String, dynamic>> todoList = [];
   double ipk = 0;
   bool cheker = false;
   // bool chekerIsNull = checkerisNull(myMaps);
@@ -36,12 +37,14 @@ class _mainPageState extends State<mainPage> {
     // Load data from Hive
     if (mybox.get("TODOLIST") == null) {
       db.create();
+
       db.updateTask();
     } else {
       db.loadTask();
     }
 
     setState(() {
+      updatePriorityQueue();
       todoList = db.todoList;
     });
 
@@ -74,6 +77,14 @@ class _mainPageState extends State<mainPage> {
     );
   }
 
+  void updatePriorityQueue() {
+    setState(() {
+      // Sorting db.todoList by 'semester'
+      db.todoList.sort((a, b) => int.parse(a['semester'].toString())
+          .compareTo(int.parse(b['semester'].toString())));
+    });
+  }
+
   void saveTask() {
     if (controllerMatkul.text.isEmpty) {
       wrongMessage("Isi Nama Matkul");
@@ -90,6 +101,7 @@ class _mainPageState extends State<mainPage> {
           "lulus": false
         });
         controllerMatkul.clear();
+        updatePriorityQueue();
         db.updateTask();
         updatePieData();
       });
@@ -111,6 +123,9 @@ class _mainPageState extends State<mainPage> {
   }
 
   void addTask() {
+    setState(() {
+      semester = "1";
+    });
     showDialog(
       context: context,
       builder: (context) {
@@ -134,31 +149,44 @@ class _mainPageState extends State<mainPage> {
     );
   }
 
+  void showIPK() {
+    showNilai(nilaiIpk: HitungIpk(db.todoList));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(234, 231, 220, 1.000),
+      backgroundColor: Color.fromARGB(255, 166, 183, 170),
       appBar: AppBar(
+        backgroundColor: Color.fromRGBO(216, 195, 165, 500),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(width: 90),
             Text(
               "IPK CALCULATOR",
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 20, color: Colors.black),
             ),
+            
           ],
         ),
         actions: [
           Row(
             children: [
+              // FloatingA(onPressed: showIPK),
               IconButton(
                 onPressed: addTask,
-                icon: Icon(Icons.add),
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
               ),
               IconButton(
                 onPressed: FirebaseAuth.instance.signOut,
-                icon: Icon(Icons.logout),
+                icon: Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
