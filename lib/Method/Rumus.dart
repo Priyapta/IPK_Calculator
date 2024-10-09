@@ -54,27 +54,21 @@ void addKeys(List<Map<String, dynamic>> list, Map<String, double> myList) {
 
 void addValues(List<Map<String, dynamic>> list, Map<String, double> myList) {
   List<String> listKeys = List<String>.from(myList.keys);
-
   for (int z = 0; z < myList.length; z++) {
-    double totalSks = 0;
-    double totalNilai = 0;
+    double sks = 0;
+    double nilai = 0;
+    double temporary = 0;
     var semester = listKeys[z];
-
     for (int i = 0; i < list.length; i++) {
-      if (list[i]["semester"] == semester && list[i]["nilaiMatkul"] != 0) {
-        double sks = double.parse(list[i]["sks"]);
-        double nilaiMatkul = list[i]["nilaiMatkul"];
-
-        double konversi = sks * konversiBobot(nilaiMatkul);
-        totalSks += sks;
-        totalNilai += konversi;
+      double nilaiMatkul = list[i]["nilaiMatkul"];
+      if (list[i]["semester"] == listKeys[z]) {
+        sks += double.parse(list[i]["sks"]);
+        temporary = sks * konversiBobot(nilaiMatkul);
+        nilai += temporary;
       }
     }
-
     if (myList.containsKey(semester)) {
       myList[semester] = nilai / sks > 4 ? 4 : nilai / sks;
-      print(nilai);
-      print(sks);
     }
   }
 }
