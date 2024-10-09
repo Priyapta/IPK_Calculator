@@ -135,7 +135,9 @@ class _AddValueState extends State<AddValue> {
       }
       widget.db.todoList[widget.index]["sks"] = sks;
       widget.db.todoList[widget.index]["semester"] = semester;
+
       widget.db.updateTask();
+
       Navigator.of(context).pop();
     });
   }
