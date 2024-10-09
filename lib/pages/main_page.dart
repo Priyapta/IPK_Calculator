@@ -274,6 +274,7 @@ class _mainPageState extends State<mainPage> {
                           ),
                         );
                         setState(() {
+                          updatePriorityQueue();
                           todoList = db.todoList;
                           updatePieData();
                         });
