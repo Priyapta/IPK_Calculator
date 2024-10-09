@@ -7,7 +7,8 @@ double HitungIpk(
   for (int i = 0; i < list.length; i++) {
     temporary = double.parse(list[i]["sks"]);
     if (list[i]["lulus"]) {
-      nilaiIpk += list[i]["nilaiMatkul"] * temporary;
+      nilaiIpk += konversiBobot(list[i]["nilaiMatkul"]) * temporary;
+
       jumlahSks += temporary;
     }
   }
@@ -53,45 +54,38 @@ void addKeys(List<Map<String, dynamic>> list, Map<String, double> myList) {
 
 void addValues(List<Map<String, dynamic>> list, Map<String, double> myList) {
   List<String> listKeys = List<String>.from(myList.keys);
+
   for (int z = 0; z < myList.length; z++) {
-    double sks = 0;
-    double nilai = 0;
-    double temporary = 0;
+    double totalSks = 0;
+    double totalNilai = 0;
     var semester = listKeys[z];
+
     for (int i = 0; i < list.length; i++) {
-      double nilaiMatkul = list[i]["nilaiMatkul"];
-      if (list[i]["semester"] == listKeys[z]) {
-        sks += double.parse(list[i]["sks"]);
-        temporary = sks * konversiBobot(nilaiMatkul);
-        nilai += temporary;
+      if (list[i]["semester"] == semester && list[i]["nilaiMatkul"] != 0) {
+        double sks = double.parse(list[i]["sks"]);
+        double nilaiMatkul = list[i]["nilaiMatkul"];
+
+        double konversi = sks * konversiBobot(nilaiMatkul);
+        totalSks += sks;
+        totalNilai += konversi;
       }
     }
+
     if (myList.containsKey(semester)) {
+<<<<<<< HEAD
       myList[semester] = nilai / sks > 4 ? 4 : nilai / sks;
       print(nilai);
       print(sks);
+=======
+      myList[semester] = totalSks > 0 ? (totalNilai / totalSks) : 0;
+>>>>>>> 95f586e0505bb82235adab405d98f1c9bc98cb56
     }
   }
 }
 
-// void sksSeperate(List<Map<String, dynamic>> list, Map<String, double> myList) {
-//   List<String> listKeys = List<String>.from(myList.keys);
-//   for (int z = 0; z < myList.length;) {
-//     var semester = listKeys[z];
-
-//     int sksTemporary = 0;
-//     for (int i = 0; i < list.length; i++) {
-//       if (myList.containsKey(list[z]["semester"]) &&
-//           list[i]["semester"] == semester) {
-//         sksTemporary += int.parse(list[i]["semester"]);
-//         myList[semester] = (myList[semester] ?? 0) + nilai;
-//         print(myList[semester]);
-//       } else {
-//         myList[semester] = 0;
-//       }
-//     }
-//   }
-// }
+bool hasValidData(Map<String, double> data) {
+  return data.values.any((value) => value > 0);
+}
 
 double HitungNilaiMatkul(List<String> komponen, List persentase) {
   double nilaiTotal = 0;
