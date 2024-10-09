@@ -1,15 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ipk_kalkulator/Method/Rumus.dart';
 import 'package:ipk_kalkulator/components/DialogBox.dart';
 import 'package:ipk_kalkulator/components/Ipktile.dart';
-import 'package:ipk_kalkulator/components/circularProgess.dart';
 import 'package:ipk_kalkulator/components/piechart.dart';
 import 'package:ipk_kalkulator/database/database.dart';
 import 'package:ipk_kalkulator/pages/addValue_page.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 class mainPage extends StatefulWidget {
   const mainPage({super.key});
@@ -18,12 +15,6 @@ class mainPage extends StatefulWidget {
   State<mainPage> createState() => _mainPageState();
 }
 
-void onPressed() {
-  FirebaseAuth.instance.signOut();
-}
-
-TextEditingController controllerMatkul = TextEditingController();
-
 class _mainPageState extends State<mainPage> {
   final mybox = Hive.box("mybox");
   Tododatabase db = Tododatabase();
@@ -31,10 +22,12 @@ class _mainPageState extends State<mainPage> {
   String nilaiMatkul = "";
   String semester = "1";
   Map<String, double> myMaps = {};
-  // final ValueNotifier<String> onSksChanged = ValueNotifier<String>("1");
-  // final ValueNotifier<String> semesterNotifier = ValueNotifier<String>("1");
   List todoList = [];
   double ipk = 0;
+
+  TextEditingController controllerMatkul = TextEditingController();
+
+  @override
   void initState() {
     if (mybox.get("TODOLIST") == null) {
       db.create();
@@ -58,7 +51,7 @@ class _mainPageState extends State<mainPage> {
     });
   }
 
-  void wrongMessage(String Message) {
+  void wrongMessage(String message) {
     showDialog(
         context: context,
         builder: (context) {
@@ -69,7 +62,7 @@ class _mainPageState extends State<mainPage> {
             title: Container(
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                child: Text(Message)),
+                child: Text(message)),
           );
         });
   }
@@ -124,7 +117,6 @@ class _mainPageState extends State<mainPage> {
         });
   }
 
-  List<double> pieValues = [4, 6, 8, 3, 5];
   @override
   Widget build(BuildContext context) {
     updatePieData();
@@ -152,61 +144,62 @@ class _mainPageState extends State<mainPage> {
                 icon: Icon(Icons.add),
               ),
               IconButton(
-                onPressed: onPressed,
+                onPressed: FirebaseAuth.instance.signOut,
                 icon: Icon(Icons.logout),
               ),
             ],
           )
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 100),
-            child: StatefulBuilder(builder: (context, setState) {
-              return SizedBox(
+      body: ListView.builder(
+        itemCount: todoList.length + 1, // +1 for the PieChart
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            // The first item is the PieChart
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 1.0, vertical: 100),
+              child: SizedBox(
                 height: 400,
                 width: 400,
                 child: CustomPie(
                   key: ValueKey(myMaps.hashCode),
                   value: myMaps,
                 ),
-              );
-            }),
-          ),
-
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [Text(Expression(ipk, db.todoList.length))],
-          // ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: todoList.length,
-                itemBuilder: (context, index) {
-                  return IpkTile(
-                      judulMatkul: db.todoList[index]["matkul"],
-                      nilaiMatkul: db.todoList[index]["nilaiMatkul"].toString(),
-                      semester: db.todoList[index]["semester"],
-                      sksMatkul: db.todoList[index]["sks"].toString(),
-                      index: db.todoList[index]["index"],
-                      lulus: db.todoList[index]["lulus"],
-                      onTap: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddValue(
-                                    db: db,
-                                    index: index,
-                                  )),
-                        );
-                        setState(() {
-                          todoList = db.todoList;
-                          updatePieData();
-                        });
-                      });
-                }),
-          ),
-        ],
+              ),
+            );
+          } else {
+            // Subsequent items are the todoList items
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IpkTile(
+                judulMatkul: db.todoList[index - 1]["matkul"]
+                    .toString(), // index - 1 because the first item is PieChart
+                nilaiMatkul: db.todoList[index - 1]["nilaiMatkul"].toString(),
+                semester: db.todoList[index - 1]["semester"],
+                sksMatkul: db.todoList[index - 1]["sks"].toString(),
+                index: db.todoList[index - 1]["index"],
+                lulus: db.todoList[index - 1]["lulus"],
+                onTap: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddValue(
+                        db: db,
+                        index: index - 1,
+                      ),
+                    ),
+                  );
+                  setState(() {
+                    print(todoList);
+                    todoList = db.todoList;
+                    updatePieData();
+                  });
+                },
+              ),
+            );
+          } 
+        },
       ),
     );
   }

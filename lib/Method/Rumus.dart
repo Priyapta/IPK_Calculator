@@ -67,7 +67,9 @@ void addValues(List<Map<String, dynamic>> list, Map<String, double> myList) {
       }
     }
     if (myList.containsKey(semester)) {
-      myList[semester] = nilai / sks;
+      myList[semester] = nilai / sks > 4 ? 4 : nilai / sks;
+      print(nilai);
+      print(sks);
     }
   }
 }
