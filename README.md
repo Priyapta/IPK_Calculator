@@ -3,7 +3,7 @@
 # IPK_Calculator
 
 see current project:
-[IPK Calculator](https://ipk-mini-project.web.app/)
+[IPK Calculator](https://ipk-mini-project.web.app)
 
 
 Feature:
