@@ -23,15 +23,10 @@ class _mainPageState extends State<mainPage> {
   String nilaiMatkul = "";
   String semester = "1";
   Map<String, double> myMaps = {};
-<<<<<<< HEAD
-  List todoList = [];
-  double ipk = 0;
-=======
   List<Map<String, dynamic>> todoList = [];
   double ipk = 0;
   bool cheker = false;
   // bool chekerIsNull = checkerisNull(myMaps);
->>>>>>> 95f586e0505bb82235adab405d98f1c9bc98cb56
 
   TextEditingController controllerMatkul = TextEditingController();
 
@@ -67,20 +62,6 @@ class _mainPageState extends State<mainPage> {
 
   void wrongMessage(String message) {
     showDialog(
-<<<<<<< HEAD
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            backgroundColor: Colors.red,
-            title: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                child: Text(message)),
-          );
-        });
-=======
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -102,7 +83,6 @@ class _mainPageState extends State<mainPage> {
       db.todoList.sort((a, b) => int.parse(a['semester'].toString())
           .compareTo(int.parse(b['semester'].toString())));
     });
->>>>>>> 95f586e0505bb82235adab405d98f1c9bc98cb56
   }
 
   void saveTask() {
@@ -231,71 +211,15 @@ class _mainPageState extends State<mainPage> {
               ),
               IconButton(
                 onPressed: FirebaseAuth.instance.signOut,
-<<<<<<< HEAD
-                icon: Icon(Icons.logout),
-=======
                 icon: Icon(
                   Icons.logout,
                   color: Colors.white,
                 ),
->>>>>>> 95f586e0505bb82235adab405d98f1c9bc98cb56
               ),
             ],
           ),
         ],
       ),
-<<<<<<< HEAD
-      body: ListView.builder(
-        itemCount: todoList.length + 1, // +1 for the PieChart
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            // The first item is the PieChart
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 1.0, vertical: 100),
-              child: SizedBox(
-                height: 400,
-                width: 400,
-                child: CustomPie(
-                  key: ValueKey(myMaps.hashCode),
-                  value: myMaps,
-                ),
-              ),
-            );
-          } else {
-            // Subsequent items are the todoList items
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: IpkTile(
-                judulMatkul: db.todoList[index - 1]["matkul"]
-                    .toString(), // index - 1 because the first item is PieChart
-                nilaiMatkul: db.todoList[index - 1]["nilaiMatkul"].toString(),
-                semester: db.todoList[index - 1]["semester"],
-                sksMatkul: db.todoList[index - 1]["sks"].toString(),
-                index: db.todoList[index - 1]["index"],
-                lulus: db.todoList[index - 1]["lulus"],
-                onTap: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddValue(
-                        db: db,
-                        index: index - 1,
-                      ),
-                    ),
-                  );
-                  setState(() {
-                    print(todoList);
-                    todoList = db.todoList;
-                    updatePieData();
-                  });
-                },
-              ),
-            );
-          }
-        },
-      ),
-=======
       body: todoList.isEmpty
           ? Center(child: Text("No tasks available."))
           : ListView.builder(
@@ -362,7 +286,6 @@ class _mainPageState extends State<mainPage> {
                 }
               },
             ),
->>>>>>> 95f586e0505bb82235adab405d98f1c9bc98cb56
     );
   }
 }

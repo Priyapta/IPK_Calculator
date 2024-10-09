@@ -72,13 +72,9 @@ void addValues(List<Map<String, dynamic>> list, Map<String, double> myList) {
     }
 
     if (myList.containsKey(semester)) {
-<<<<<<< HEAD
       myList[semester] = nilai / sks > 4 ? 4 : nilai / sks;
       print(nilai);
       print(sks);
-=======
-      myList[semester] = totalSks > 0 ? (totalNilai / totalSks) : 0;
->>>>>>> 95f586e0505bb82235adab405d98f1c9bc98cb56
     }
   }
 }
