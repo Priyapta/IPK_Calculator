@@ -19,6 +19,7 @@ class AddValue extends StatefulWidget {
 }
 
 class _AddValueState extends State<AddValue> {
+  String a = "";
   List<TextEditingController> componentControllers = [];
   List<TextEditingController> nilaiControllers = [];
   List<TextEditingController> persentaseControllers = [];
@@ -46,6 +47,7 @@ class _AddValueState extends State<AddValue> {
       persentaseControllers.add(TextEditingController());
     }
   }
+
   //jika kontroller tidak dipakai maka langung dihilangkan
   @override
   void dispose() {
@@ -73,6 +75,7 @@ class _AddValueState extends State<AddValue> {
   void cancel() {
     Navigator.of(context).pop();
   }
+
   //untuk edit matkul
   void Edit() {
     showDialog(
