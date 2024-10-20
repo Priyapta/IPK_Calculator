@@ -17,4 +17,5 @@ OnProgress:
 - Summary  subject  of each semester
 - Calculate IPK
 - Subject each semester in sequence
+- Hosting
 
