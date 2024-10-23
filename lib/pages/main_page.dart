@@ -188,7 +188,7 @@ class _mainPageState extends State<mainPage> {
             Text(
               "IPKCALC",
               style: TextStyle(
-                fontSize: 15, color: Colors.black, fontFamily: "ToyStory",
+                fontSize: 15, color: Colors.black,
                 // Tambahkan ketebalan font
                 letterSpacing: 1.2,
               ),
