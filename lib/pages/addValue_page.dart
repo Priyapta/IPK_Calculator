@@ -20,6 +20,7 @@ class AddValue extends StatefulWidget {
 }
 
 class _AddValueState extends State<AddValue> {
+  String a = "";
   List<TextEditingController> componentControllers = [];
   List<TextEditingController> nilaiControllers = [];
   List<TextEditingController> persentaseControllers = [];
@@ -192,7 +193,6 @@ class _AddValueState extends State<AddValue> {
                 [komponen.toLowerCase()] = value;
           }
         }
-        Navigator.of(context).pop();
       }
       //Perhitungan dari index dan nilai matkul
       widget.db.updateTask();
@@ -209,6 +209,7 @@ class _AddValueState extends State<AddValue> {
       widget.db.todoList[widget.index]["lulus"] = lulus(nilaiKomponenSementara);
       widget.db.updateTask();
     });
+    Navigator.pop(context);
   }
 
   @override
