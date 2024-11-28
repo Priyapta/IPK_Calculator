@@ -57,6 +57,7 @@ class _mainPageState extends State<mainPage> {
       addKeys(db.todoList, myMaps);
       addValues(db.todoList, myMaps);
       ipk = konversiBobot(HitungIpk(db.todoList));
+      
     });
   }
 
@@ -181,7 +182,7 @@ class _mainPageState extends State<mainPage> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 166, 183, 170),
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(216, 195, 165, 500),
+        backgroundColor: Colors.transparent,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -209,13 +210,13 @@ class _mainPageState extends State<mainPage> {
                   color: Colors.white,
                 ),
               ),
-              IconButton(
-                onPressed: FirebaseAuth.instance.signOut,
-                icon: Icon(
-                  Icons.logout,
-                  color: Colors.white,
-                ),
-              ),
+              // IconButton(
+              //   onPressed: FirebaseAuth.instance.signOut,
+              //   icon: Icon(
+              //     Icons.logout,
+              //     color: Colors.white,
+              //   ),
+              // ),
             ],
           ),
         ],

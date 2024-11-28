@@ -41,6 +41,7 @@ double ip(
       jumlahSks += list[i]["sks"];
     }
   }
+  // print(nilaiIpk / jumlahSks);
   return nilaiIpk / jumlahSks;
 }
 
@@ -59,16 +60,24 @@ void addValues(List<Map<String, dynamic>> list, Map<String, double> myList) {
     double nilai = 0;
     double temporary = 0;
     var semester = listKeys[z];
+
     for (int i = 0; i < list.length; i++) {
       double nilaiMatkul = list[i]["nilaiMatkul"];
-      if (list[i]["semester"] == listKeys[z]) {
-        sks += double.parse(list[i]["sks"]);
-        temporary = sks * konversiBobot(nilaiMatkul);
+      if (list[i]["semester"] == semester) {
+        // Mengonversi sks dari string ke double
+        double sksMatkul = double.parse(list[i]["sks"].toString());
+        sks += sksMatkul;
+
+        // Menghitung nilai sementara berdasarkan konversi bobot
+        temporary = sksMatkul * konversiBobot(nilaiMatkul);
+
         nilai += temporary;
       }
     }
+
     if (myList.containsKey(semester)) {
-      myList[semester] = nilai / sks > 4 ? 4 : nilai / sks;
+      double rataRata = nilai / sks;
+      myList[semester] = rataRata > 4 ? 4 : rataRata;
     }
   }
 }
@@ -84,6 +93,7 @@ double HitungNilaiMatkul(List<String> komponen, List persentase) {
     double nilaiMatkul = double.parse(komponen[i]);
     double persentaseKomponen = double.parse(persentase[i]);
     nilaiTotal += nilaiMatkul * persentaseKomponen / 100;
+    ;
   }
 
   return nilaiTotal;
