@@ -57,7 +57,6 @@ class _mainPageState extends State<mainPage> {
       addKeys(db.todoList, myMaps);
       addValues(db.todoList, myMaps);
       ipk = konversiBobot(HitungIpk(db.todoList));
-      
     });
   }
 

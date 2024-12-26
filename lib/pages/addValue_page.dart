@@ -321,16 +321,14 @@ class _AddValueState extends State<AddValue> {
                               ],
                             ),
                           ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      deleteComponent(index);
-                                    },
-                                    icon: Icon(Icons.delete))
-                              ],
-                            ),
+                          Column(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    deleteComponent(index);
+                                  },
+                                  icon: Icon(Icons.delete))
+                            ],
                           )
                         ],
                       ),

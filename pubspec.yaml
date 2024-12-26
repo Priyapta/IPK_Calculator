@@ -41,7 +41,7 @@ dependencies:
   hive_flutter: ^1.1.0
   pie_chart: ^5.4.0
   fl_chart: ^0.68.0
-  flutter_slidable: ^3.1.1
+  flutter_slidable: ^3.1.2
 
 dev_dependencies:
   flutter_test:
@@ -71,10 +71,7 @@ flutter:
     - assets/google.png
 
 
-  fonts:
-    - family: ToyStory
-      fonts:
-        - asset: fonts/LuckiestGuyRegular.ttf
+ 
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
