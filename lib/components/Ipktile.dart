@@ -59,26 +59,35 @@ class _IpkTileState extends State<IpkTile> {
                           Text(
                             widget.judulMatkul,
                             style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                         ],
                       ),
                       Row(
                         children: [
-                          Text("semester: "),
-                          Text(widget.semester),
+                          Text("semester: ",
+                              style: TextStyle(color: Colors.black)),
+                          Text(widget.semester,
+                              style: TextStyle(color: Colors.black)),
                         ],
                       ),
                       Row(
                         children: [
-                          Text("SKS: "),
-                          Text(widget.sksMatkul),
+                          Text("SKS: ", style: TextStyle(color: Colors.black)),
+                          Text(widget.sksMatkul,
+                              style: TextStyle(color: Colors.black)),
                         ],
                       ),
                       Row(
                         children: [
-                          Text("Nilai Mata Kuliah: "),
-                          Text(widget.nilaiMatkul ?? " "),
+                          Text(
+                            "Nilai Mata Kuliah: ",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Text(widget.nilaiMatkul ?? " ",
+                              style: TextStyle(color: Colors.black)),
                         ],
                       ),
                     ],
@@ -86,15 +95,18 @@ class _IpkTileState extends State<IpkTile> {
                   Spacer(),
                   Text(
                     widget.index,
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
                   ),
                 ],
               ),
             ),
             decoration: BoxDecoration(
               color: widget.lulus
-                  ? Color.fromRGBO(136, 171, 142, 1.000)
-                  : Color.fromRGBO(233, 128, 116, 1.000),
+                  ? Color(0xFF88AB8E)
+                  : const Color.fromARGB(255, 234, 107, 88),
               borderRadius: BorderRadius.circular(5),
             ),
           ),

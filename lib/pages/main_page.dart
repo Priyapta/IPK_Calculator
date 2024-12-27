@@ -5,6 +5,7 @@ import 'package:ipk_kalkulator/Method/Rumus.dart';
 import 'package:ipk_kalkulator/components/DialogBox.dart';
 import 'package:ipk_kalkulator/components/Ipktile.dart';
 import 'package:ipk_kalkulator/components/piechart.dart';
+import 'package:ipk_kalkulator/components/show_ip.dart';
 import 'package:ipk_kalkulator/database/database.dart';
 import 'package:ipk_kalkulator/pages/addValue_page.dart';
 
@@ -22,7 +23,7 @@ class _mainPageState extends State<mainPage> {
   String nilaiMatkul = "";
   String semester = "1";
   Map<String, double> myMaps = {};
-  List todoList = [];
+  List<Map<String, dynamic>> todoList = [];
   double ipk = 0;
   bool cheker = false;
   // bool chekerIsNull = checkerisNull(myMaps);
@@ -36,12 +37,14 @@ class _mainPageState extends State<mainPage> {
     // Load data from Hive
     if (mybox.get("TODOLIST") == null) {
       db.create();
+
       db.updateTask();
     } else {
       db.loadTask();
     }
 
     setState(() {
+      updatePriorityQueue();
       todoList = db.todoList;
     });
 
@@ -74,6 +77,14 @@ class _mainPageState extends State<mainPage> {
     );
   }
 
+  void updatePriorityQueue() {
+    setState(() {
+      // Sorting db.todoList by 'semester'
+      db.todoList.sort((a, b) => int.parse(a['semester'].toString())
+          .compareTo(int.parse(b['semester'].toString())));
+    });
+  }
+
   void saveTask() {
     if (controllerMatkul.text.isEmpty) {
       wrongMessage("Isi Nama Matkul");
@@ -90,6 +101,7 @@ class _mainPageState extends State<mainPage> {
           "lulus": false
         });
         controllerMatkul.clear();
+        updatePriorityQueue();
         db.updateTask();
         updatePieData();
       });
@@ -111,6 +123,9 @@ class _mainPageState extends State<mainPage> {
   }
 
   void addTask() {
+    setState(() {
+      semester = "1";
+    });
     showDialog(
       context: context,
       builder: (context) {
@@ -134,32 +149,73 @@ class _mainPageState extends State<mainPage> {
     );
   }
 
+  void showIPK() {
+    // Calculate the IPK value
+    double ipk = HitungIpk(db.todoList);
+
+    // Show the IPK in an AlertDialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("IPK Anda"),
+          content: Text(
+            "Nilai IPK: ${ipk.toStringAsFixed(2)}", // Display IPK with 2 decimal points
+            style: TextStyle(fontSize: 18),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(234, 231, 220, 1.000),
+      backgroundColor: Color.fromARGB(255, 166, 183, 170),
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(width: 90),
             Text(
-              "IPK CALCULATOR",
-              style: TextStyle(fontSize: 20),
+              "IPKCALC",
+              style: TextStyle(
+                fontSize: 15, color: Colors.black,
+                // Tambahkan ketebalan font
+                letterSpacing: 1.2,
+              ),
             ),
           ],
         ),
         actions: [
           Row(
             children: [
+              TextButton(
+                onPressed: showIPK,
+                child: Text("IPK"),
+              ),
               IconButton(
                 onPressed: addTask,
-                icon: Icon(Icons.add),
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
               ),
-              IconButton(
-                onPressed: FirebaseAuth.instance.signOut,
-                icon: Icon(Icons.logout),
-              ),
+              // IconButton(
+              //   onPressed: FirebaseAuth.instance.signOut,
+              //   icon: Icon(
+              //     Icons.logout,
+              //     color: Colors.white,
+              //   ),
+              // ),
             ],
           ),
         ],
@@ -198,14 +254,27 @@ class _mainPageState extends State<mainPage> {
                       onTap: () async {
                         await Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => AddValue(
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    AddValue(
                               db: db,
                               index: index - 1,
                             ),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                            transitionDuration: Duration(
+                                milliseconds:
+                                    300), // Adjust the duration if needed
                           ),
                         );
                         setState(() {
+                          updatePriorityQueue();
                           todoList = db.todoList;
                           updatePieData();
                         });

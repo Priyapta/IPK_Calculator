@@ -20,6 +20,7 @@ class AddValue extends StatefulWidget {
 }
 
 class _AddValueState extends State<AddValue> {
+  String a = "";
   List<TextEditingController> componentControllers = [];
   List<TextEditingController> nilaiControllers = [];
   List<TextEditingController> persentaseControllers = [];
@@ -130,10 +131,14 @@ class _AddValueState extends State<AddValue> {
 
   void editTask() {
     setState(() {
-      widget.db.todoList[widget.index]["matkul"] = controllerMatkul.text;
-      widget.db.todoList[widget.index]["sks"] = int.parse(sks);
+      if (controllerMatkul.text.isNotEmpty) {
+        widget.db.todoList[widget.index]["matkul"] = controllerMatkul.text;
+      }
+      widget.db.todoList[widget.index]["sks"] = sks;
       widget.db.todoList[widget.index]["semester"] = semester;
+
       widget.db.updateTask();
+
       Navigator.of(context).pop();
     });
   }
@@ -197,13 +202,13 @@ class _AddValueState extends State<AddValue> {
       // Hitung dari nilaiMatkul
       nilaiKomponenSementara = HitungNilaiMatkul(
           hintTextNilai, widget.db.todoList[widget.index]["persentase"]);
-      nilaiKomponenSementara = HitungNilaiMatkul(
-          hintTextNilai, widget.db.todoList[widget.index]["persentase"]);
+
       widget.db.todoList[widget.index]["nilaiMatkul"] = nilaiKomponenSementara;
       widget.db.todoList[widget.index]["index"] = Index(nilaiKomponenSementara);
       widget.db.todoList[widget.index]["lulus"] = lulus(nilaiKomponenSementara);
       widget.db.updateTask();
     });
+    Navigator.pop(context);
   }
 
   @override
@@ -211,6 +216,7 @@ class _AddValueState extends State<AddValue> {
     double screenWidth = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 144, 174, 173),
         title: Center(child: Text("Komponen Nilai")),
         actions: [
           Padding(
@@ -219,7 +225,7 @@ class _AddValueState extends State<AddValue> {
           )
         ],
       ),
-      backgroundColor: Color.fromRGBO(234, 231, 220, 1.000),
+      backgroundColor: Color.fromARGB(255, 144, 174, 173),
       floatingActionButton: FloatingActionButton(
         onPressed: addComponent,
         child: Icon(Icons.add),
@@ -230,88 +236,92 @@ class _AddValueState extends State<AddValue> {
             child: ListView.builder(
               itemCount: count,
               itemBuilder: (context, index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                child: Text(
-                                  "Matakuliah",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 5.0),
+                                  child: Text(
+                                    "Matakuliah",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                              ComponentField(
-                                width: screenWidth / 2,
-                                controller: componentControllers[index],
-                                hintText: (index < hintTextMatkul.length &&
-                                        hintTextMatkul[index].isNotEmpty)
-                                    ? hintTextMatkul[index]
-                                    : " ",
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                child: Text(
-                                  "Nilai",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ComponentField(
+                                  width: screenWidth / 2,
+                                  controller: componentControllers[index],
+                                  hintText: (index < hintTextMatkul.length &&
+                                          hintTextMatkul[index].isNotEmpty)
+                                      ? hintTextMatkul[index]
+                                      : " ",
                                 ),
-                              ),
-                              ComponentField(
-                                width: screenWidth / 4,
-                                controller: nilaiControllers[index],
-                                hintText: (index < hintTextNilai.length &&
-                                        hintTextNilai[index].isNotEmpty)
-                                    ? hintTextNilai[index]
-                                    : " ",
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                child: Text(
-                                  "Persentase",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 5.0),
+                                  child: Text(
+                                    "Nilai",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                              ComponentField(
-                                width: screenWidth / 6,
-                                controller: persentaseControllers[index],
-                                hintText: (index <
-                                        widget
-                                            .db
-                                            .todoList[widget.index]
-                                                ["persentase"]
-                                            .length)
-                                    ? widget.db.todoList[widget.index]
-                                        ["persentase"][index]
-                                    : " ",
-                              ),
-                            ],
+                                ComponentField(
+                                  width: screenWidth / 4,
+                                  controller: nilaiControllers[index],
+                                  hintText: (index < hintTextNilai.length &&
+                                          hintTextNilai[index].isNotEmpty)
+                                      ? hintTextNilai[index]
+                                      : " ",
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Column(
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 5.0),
+                                  child: Text(
+                                    "Persentase",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                ComponentField(
+                                  width: screenWidth / 6,
+                                  controller: persentaseControllers[index],
+                                  hintText: (index <
+                                          widget
+                                              .db
+                                              .todoList[widget.index]
+                                                  ["persentase"]
+                                              .length)
+                                      ? widget.db.todoList[widget.index]
+                                          ["persentase"][index]
+                                      : " ",
+                                ),
+                              ],
+                            ),
+                          ),
+                          Column(
                             children: [
                               IconButton(
                                   onPressed: () {
@@ -319,16 +329,19 @@ class _AddValueState extends State<AddValue> {
                                   },
                                   icon: Icon(Icons.delete))
                             ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
           ),
-          ElevatedButton(onPressed: saveTask, child: Text("Save")),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: ElevatedButton(onPressed: saveTask, child: Text("Save")),
+          ),
         ],
       ),
     );
