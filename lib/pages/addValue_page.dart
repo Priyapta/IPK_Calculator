@@ -11,15 +11,25 @@ class AddValue extends StatefulWidget {
     super.key,
     required this.db,
     required this.index,
+    required this.selectedSemester,
   });
   final Tododatabase db;
   final int index;
+  final int selectedSemester;
 
   @override
   State<AddValue> createState() => _AddValueState();
 }
 
 class _AddValueState extends State<AddValue> {
+  List<Map<String, dynamic>> filterBySemester(int semester) {
+    // This function filters the todoList to only return tasks for the selected semester
+
+    return widget.db.todoList
+        .where((task) => int.parse(task["semester"].toString()) == semester)
+        .toList();
+  }
+
   String a = "";
   List<TextEditingController> componentControllers = [];
   List<TextEditingController> nilaiControllers = [];
@@ -36,6 +46,21 @@ class _AddValueState extends State<AddValue> {
   @override
   void initState() {
     super.initState();
+    List<Map<String, dynamic>> filteredTodoList =
+        filterBySemester(widget.selectedSemester);
+    // print(widget.index);
+    // print(widget.db.todoList);
+    if (filteredTodoList.isNotEmpty) {
+      print(widget.selectedSemester);
+      // Access the task for the selected index within the filtered list
+      var selectedTask = filteredTodoList[0];
+      // count = selectedTask["komponen"].length;
+      // hintTextMatkul = List<String>.from(selectedTask["komponen"].keys);
+      // hintTextNilai = List<String>.from(selectedTask["komponen"].values);
+    }
+
+    // print(filteredTodoList);
+    print(widget.db.todoList);
     count = widget.db.todoList[widget.index]["komponen"].length;
     hintTextMatkul =
         List<String>.from(widget.db.todoList[widget.index]["komponen"].keys);
@@ -207,6 +232,7 @@ class _AddValueState extends State<AddValue> {
       widget.db.todoList[widget.index]["index"] = Index(nilaiKomponenSementara);
       widget.db.todoList[widget.index]["lulus"] = lulus(nilaiKomponenSementara);
       widget.db.updateTask();
+      print(widget.db.todoList);
     });
     Navigator.pop(context);
   }

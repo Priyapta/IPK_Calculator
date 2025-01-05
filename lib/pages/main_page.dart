@@ -17,6 +17,7 @@ class mainPage extends StatefulWidget {
 }
 
 class _mainPageState extends State<mainPage> {
+  int selectedSemester = 1;
   final mybox = Hive.box("mybox");
   Tododatabase db = Tododatabase();
   String sks = "1";
@@ -25,10 +26,17 @@ class _mainPageState extends State<mainPage> {
   Map<String, double> myMaps = {};
   List<Map<String, dynamic>> todoList = [];
   double ipk = 0;
-  bool cheker = false;
-  // bool chekerIsNull = checkerisNull(myMaps);
 
   TextEditingController controllerMatkul = TextEditingController();
+
+  // Correct filter method that works on todoList
+  List<Map<String, dynamic>> filterBySemester(int semester) {
+    todoList = db.todoList;
+
+    return todoList
+        .where((task) => int.parse(task["semester"].toString()) == semester)
+        .toList();
+  }
 
   @override
   void initState() {
@@ -37,18 +45,18 @@ class _mainPageState extends State<mainPage> {
     // Load data from Hive
     if (mybox.get("TODOLIST") == null) {
       db.create();
-
       db.updateTask();
     } else {
       db.loadTask();
     }
 
+    // Load todoList initially
     setState(() {
-      updatePriorityQueue();
       todoList = db.todoList;
+      // // Load all tasks initially
+      todoList = filterBySemester(selectedSemester);
+      updatePieData();
     });
-
-    updatePieData();
   }
 
   void updatePieData() {
@@ -60,27 +68,10 @@ class _mainPageState extends State<mainPage> {
     });
   }
 
-  void wrongMessage(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          backgroundColor: Colors.red,
-          title: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
-            child: Text(message),
-          ),
-        );
-      },
-    );
-  }
-
   void updatePriorityQueue() {
     setState(() {
-      // Sorting db.todoList by 'semester'
-      db.todoList.sort((a, b) => int.parse(a['semester'].toString())
+      // Sorting todoList by 'semester'
+      todoList.sort((a, b) => int.parse(a['semester'].toString())
           .compareTo(int.parse(b['semester'].toString())));
     });
   }
@@ -104,6 +95,7 @@ class _mainPageState extends State<mainPage> {
         updatePriorityQueue();
         db.updateTask();
         updatePieData();
+        // todoList = filterBySemester(int.parse(semester));
       });
       Navigator.of(context).pop();
     }
@@ -117,7 +109,8 @@ class _mainPageState extends State<mainPage> {
     setState(() {
       db.todoList.removeAt(index);
       db.updateTask();
-      todoList = db.todoList;
+      // todoList = db.todoList; // Re-load the full list
+      todoList = filterBySemester(selectedSemester);
       updatePieData();
     });
   }
@@ -144,6 +137,35 @@ class _mainPageState extends State<mainPage> {
           },
           saveTask: saveTask,
           cancel: cancel,
+        );
+      },
+    );
+  }
+
+  int getObjectinDB(Map<String, dynamic> data) {
+    for (int i = 0; i < db.todoList.length; i++) {
+      if (db.todoList[i] == data) {
+        return i;
+      }
+    }
+    return 0;
+  }
+
+  void wrongMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Error"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
         );
       },
     );
@@ -179,113 +201,166 @@ class _mainPageState extends State<mainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 166, 183, 170),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              "IPKCALC",
-              style: TextStyle(
-                fontSize: 15, color: Colors.black,
-                // Tambahkan ketebalan font
-                letterSpacing: 1.2,
+        backgroundColor: Color.fromARGB(255, 166, 183, 170),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                "IPKCALC",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  letterSpacing: 1.2,
+                ),
               ),
+            ],
+          ),
+          actions: [
+            Row(
+              children: [
+                TextButton(
+                  onPressed: showIPK,
+                  child: Text("IPK"),
+                ),
+                IconButton(
+                  onPressed: addTask,
+                  icon: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-        actions: [
-          Row(
-            children: [
-              TextButton(
-                onPressed: showIPK,
-                child: Text("IPK"),
-              ),
-              IconButton(
-                onPressed: addTask,
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.white,
+        body: ListView(
+          shrinkWrap: true,
+          children: [
+            // DropdownButton to select the semester
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                decoration: BoxDecoration(
+                  color:
+                      const Color.fromARGB(115, 94, 73, 73), // Background color
+                  borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                  border: Border.all(
+                      color: Colors.grey, width: 1.0), // Border styling
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5), // Shadow color
+                      spreadRadius: 2, // Shadow spread
+                      blurRadius: 4, // Shadow blur
+                      offset: Offset(0, 2), // Shadow position
+                    ),
+                  ],
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<int>(
+                    value: selectedSemester,
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        selectedSemester = newValue!;
+                        todoList = filterBySemester(selectedSemester);
+                      });
+                    },
+                    items: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        .map<DropdownMenuItem<int>>((int value) {
+                      return DropdownMenuItem<int>(
+                        value: value,
+                        child: Text(
+                          'Semester $value',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.white, // Text color
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    icon: Icon(
+                      Icons.arrow_drop_down, // Custom dropdown icon
+                      color: Colors.blue, // Icon color
+                    ),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.black87, // Text styling
+                    ),
+                    dropdownColor: const Color.fromARGB(
+                        115, 94, 73, 73), // Dropdown menu background color
+                  ),
                 ),
               ),
-              // IconButton(
-              //   onPressed: FirebaseAuth.instance.signOut,
-              //   icon: Icon(
-              //     Icons.logout,
-              //     color: Colors.white,
-              //   ),
-              // ),
-            ],
-          ),
-        ],
-      ),
-      body: todoList.isEmpty
-          ? Center(child: Text("No tasks available."))
-          : ListView.builder(
-              itemCount: todoList.length + 1, // +1 for the PieChart
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  if (hasValidData(myMaps)) {
-                    return SizedBox(
+            ),
+
+            // Check if todoList is empty
+            if (db.todoList.isEmpty)
+              Center(child: Text("No tasks available."))
+            else
+              Column(
+                children: [
+                  // CustomPie widget for PieChart
+                  if (hasValidData(myMaps))
+                    SizedBox(
                       height: 400,
                       width: 400,
                       child: CustomPie(
                         key: ValueKey(myMaps.hashCode),
                         value: myMaps,
                       ),
-                    );
-                  } else {
-                    return Text("");
-                  }
-                  // Display the PieChart
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: IpkTile(
-                      judulMatkul: db.todoList[index - 1]["matkul"],
-                      nilaiMatkul:
-                          db.todoList[index - 1]["nilaiMatkul"].toString(),
-                      semester: db.todoList[index - 1]["semester"],
-                      sksMatkul: db.todoList[index - 1]["sks"].toString(),
-                      index: db.todoList[index - 1]["index"],
-                      lulus: db.todoList[index - 1]["lulus"],
-                      deleteFunction: (context) => deleteTask(index - 1),
-                      onTap: () async {
-                        await Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    AddValue(
-                              db: db,
-                              index: index - 1,
-                            ),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: child,
-                              );
-                            },
-                            transitionDuration: Duration(
-                                milliseconds:
-                                    300), // Adjust the duration if needed
-                          ),
-                        );
-                        setState(() {
-                          updatePriorityQueue();
-                          todoList = db.todoList;
-                          updatePieData();
-                        });
-                      },
                     ),
-                  );
 
-                  // Display the list items
-                }
-              },
-            ),
-    );
+                  // ListView.builder for todoList items
+                  ...todoList.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final item = entry.value;
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IpkTile(
+                        judulMatkul: item["matkul"],
+                        nilaiMatkul: item["nilaiMatkul"].toString(),
+                        semester: item["semester"],
+                        sksMatkul: item["sks"].toString(),
+                        index: item["index"],
+                        lulus: item["lulus"],
+                        deleteFunction: (context) =>
+                            deleteTask(getObjectinDB(item)),
+                        onTap: () async {
+                          await Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      AddValue(
+                                selectedSemester: selectedSemester,
+                                db: db,
+                                index: getObjectinDB(item),
+                              ),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                );
+                              },
+                              transitionDuration: Duration(milliseconds: 300),
+                            ),
+                          );
+                          setState(() {
+                            updatePriorityQueue();
+                            // todoList = db.todoList;
+                            todoList = filterBySemester(selectedSemester);
+                            updatePieData();
+                          });
+                        },
+                      ),
+                    );
+                  }).toList(),
+                ],
+              ),
+          ],
+        ));
   }
 }

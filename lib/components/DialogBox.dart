@@ -53,7 +53,7 @@ class _DialogBoxState extends State<DialogBox> {
                       Text("SKS",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       DropDown(
-                        items: ["1", "2", "3", "4", "5"],
+                        items: ["1", "2", "3", "4", "5", "6"],
                         onChanged: widget.onSksChanged,
                       ),
                     ],
