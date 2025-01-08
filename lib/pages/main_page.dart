@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -8,6 +9,7 @@ import 'package:ipk_kalkulator/components/piechart.dart';
 import 'package:ipk_kalkulator/components/show_ip.dart';
 import 'package:ipk_kalkulator/database/database.dart';
 import 'package:ipk_kalkulator/pages/addValue_page.dart';
+import 'package:ipk_kalkulator/pages/summary_score_page.dart';
 
 class mainPage extends StatefulWidget {
   const mainPage({super.key});
@@ -95,7 +97,8 @@ class _mainPageState extends State<mainPage> {
         updatePriorityQueue();
         db.updateTask();
         updatePieData();
-        // todoList = filterBySemester(int.parse(semester));
+
+        todoList = filterBySemester(selectedSemester);
       });
       Navigator.of(context).pop();
     }
@@ -198,9 +201,60 @@ class _mainPageState extends State<mainPage> {
     );
   }
 
+  bool isCliked = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: addTask,
+          shape: CircleBorder(),
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          backgroundColor: Color.fromARGB(255, 97, 102, 98),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.grey[200],
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    isCliked = !isCliked;
+                  });
+                },
+                icon: Icon(
+                  Icons.home,
+                  color: !isCliked ? Colors.green[400] : Colors.black,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  setState(
+                    () {
+                      isCliked = !isCliked;
+                      // showIPK();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SummaryScorePage(
+                                  isCliked: isCliked,
+                                )),
+                      );
+                    },
+                  );
+                },
+                icon: Icon(
+                  Icons.school_rounded,
+                  color: isCliked ? Colors.green[400] : Colors.black,
+                ),
+              )
+            ],
+          ),
+        ),
         backgroundColor: Color.fromARGB(255, 166, 183, 170),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -210,7 +264,7 @@ class _mainPageState extends State<mainPage> {
               Text(
                 "IPKCALC",
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 25,
                   color: Colors.black,
                   letterSpacing: 1.2,
                 ),
@@ -224,13 +278,6 @@ class _mainPageState extends State<mainPage> {
                   onPressed: showIPK,
                   child: Text("IPK"),
                 ),
-                IconButton(
-                  onPressed: addTask,
-                  icon: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
               ],
             ),
           ],
@@ -240,58 +287,73 @@ class _mainPageState extends State<mainPage> {
           children: [
             // DropdownButton to select the semester
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                decoration: BoxDecoration(
-                  color:
-                      const Color.fromARGB(115, 94, 73, 73), // Background color
-                  borderRadius: BorderRadius.circular(8.0), // Rounded corners
-                  border: Border.all(
-                      color: Colors.grey, width: 1.0), // Border styling
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5), // Shadow color
-                      spreadRadius: 2, // Shadow spread
-                      blurRadius: 4, // Shadow blur
-                      offset: Offset(0, 2), // Shadow position
-                    ),
-                  ],
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<int>(
-                    value: selectedSemester,
-                    onChanged: (int? newValue) {
-                      setState(() {
-                        selectedSemester = newValue!;
-                        todoList = filterBySemester(selectedSemester);
-                      });
-                    },
-                    items: [1, 2, 3, 4, 5, 6, 7, 8, 9]
-                        .map<DropdownMenuItem<int>>((int value) {
-                      return DropdownMenuItem<int>(
-                        value: value,
-                        child: Text(
-                          'Semester $value',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.white, // Text color
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                    icon: Icon(
-                      Icons.arrow_drop_down, // Custom dropdown icon
-                      color: Colors.blue, // Icon color
-                    ),
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Recent Semester",
                     style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.black87, // Text styling
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      // color: Colors.white
                     ),
-                    dropdownColor: const Color.fromARGB(
-                        115, 94, 73, 73), // Dropdown menu background color
                   ),
-                ),
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(
+                          115, 94, 73, 73), // Background color
+                      borderRadius:
+                          BorderRadius.circular(20.0), // Rounded corners
+                      border: Border.all(
+                          color: Colors.grey, width: 0.5), // Border styling
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5), // Shadow color
+                          spreadRadius: 2, // Shadow spread
+                          blurRadius: 4, // Shadow blur
+                          offset: Offset(0, 2), // Shadow position
+                        ),
+                      ],
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<int>(
+                        value: selectedSemester,
+                        onChanged: (int? newValue) {
+                          setState(() {
+                            selectedSemester = newValue!;
+                            todoList = filterBySemester(selectedSemester);
+                          });
+                        },
+                        items: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                            .map<DropdownMenuItem<int>>((int value) {
+                          return DropdownMenuItem<int>(
+                            value: value,
+                            child: Text(
+                              'Semester $value',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.white, // Text color
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        icon: Icon(
+                          Icons.arrow_drop_down, // Custom dropdown icon
+                          color: Colors.blue, // Icon color
+                        ),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.black87, // Text styling
+                        ),
+                        dropdownColor: const Color.fromARGB(
+                            115, 94, 73, 73), // Dropdown menu background color
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -314,7 +376,7 @@ class _mainPageState extends State<mainPage> {
 
                   // ListView.builder for todoList items
                   ...todoList.asMap().entries.map((entry) {
-                    final index = entry.key;
+                    // final index = entry.key;
                     final item = entry.value;
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -352,6 +414,7 @@ class _mainPageState extends State<mainPage> {
                             updatePriorityQueue();
                             // todoList = db.todoList;
                             todoList = filterBySemester(selectedSemester);
+                            print(todoList);
                             updatePieData();
                           });
                         },
