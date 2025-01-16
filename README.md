@@ -7,7 +7,7 @@ see current project:
 
 
 Feature:
-- login using username & password
+- Calculate IPK
 - Calculate IP
 - Update on Your Input Subject title
 - Delete Subject using slidable (Slide left your current Subject it will appear an delete button)
@@ -15,7 +15,6 @@ Feature:
 
 OnProgress:
 - Summary  subject  of each semester
-- Calculate IPK
 - Subject each semester in sequence
 - Hosting
 
